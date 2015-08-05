@@ -36,15 +36,7 @@ class %s extends Picotainer
 
 EOF;
 
-        $pos = strrpos($className, '\\');
-        if ($pos !== false) {
-            $shortClassName = substr($className, $pos+1);
-            $namespaceLine = "namespace ".substr($className, 0, $pos).";";
-        } else {
-            $shortClassName = $className;
-            $namespaceLine = "";
-        }
-
+        list($shortClassName, $namespaceLine) = $this->splitFQCN($className);
 
         $closuresCode = "";
 
@@ -55,4 +47,18 @@ EOF;
         return sprintf($classCode, $namespaceLine, $shortClassName, $closuresCode);
     }
 
+    private function splitFQCN($className) {
+        $pos = strrpos($className, '\\');
+        if ($pos !== false) {
+            $shortClassName = substr($className, $pos+1);
+            $namespaceLine = "namespace ".substr($className, 0, $pos).";";
+        } else {
+            $shortClassName = $className;
+            $namespaceLine = "";
+        }
+        return [
+            $shortClassName,
+            $namespaceLine
+        ];
+    }
 }
