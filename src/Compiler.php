@@ -1,0 +1,58 @@
+<?php
+namespace TheCodingMachine\Yaco;
+use Interop\Container\Compiler\DefinitionInterface;
+
+/**
+ * A class that generates a PHP class (a container) from definitions.
+ */
+class Compiler
+{
+
+    private $definitions = [];
+
+    public function addDefinition($identifier, DefinitionInterface $definition) {
+        $this->definitions[$identifier] = $definition;
+    }
+
+    /**
+     * @param string $className
+     * @return string
+     */
+    public function compile($className) {
+
+        $classCode = <<<EOF
+<?php
+%s
+
+use Mouf\Picotainer\Picotainer;
+
+class %s extends Picotainer
+{
+    public function __construct(ContainerInterface \$delegateLookupContainer = null) {
+        parent::__construct([
+%s        ], \$delegateLookupContainer);
+    }
+}
+
+EOF;
+
+        $pos = strrpos($className, '\\');
+        if ($pos !== false) {
+            $shortClassName = substr($className, $pos+1);
+            $namespaceLine = "namespace ".substr($className, 0, $pos).";";
+        } else {
+            $shortClassName = $className;
+            $namespaceLine = "";
+        }
+
+
+        $closuresCode = "";
+
+        foreach ($this->definitions as $identifier => $definition) {
+            $closuresCode .= "            ".var_export($identifier, true)." => ".$definition->toPhpCode().",\n";
+        }
+
+        return sprintf($classCode, $namespaceLine, $shortClassName, $closuresCode);
+    }
+
+}
