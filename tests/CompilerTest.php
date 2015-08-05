@@ -3,6 +3,7 @@ namespace TheCodingMachine\Yaco;
 
 
 use Mouf\Container\Definition\InstanceDefinition;
+use Mouf\Container\Definition\ParameterDefinition;
 
 class CompilerTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,6 +29,30 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $myContainer = new \MyContainerNoNamespace();
         $result = $myContainer->get("test");
         $this->assertInstanceOf("\\stdClass", $result);
+    }
+
+    public function testParameter() {
+        $parameterDefinition = new ParameterDefinition("test", "value");
+
+        $compiler = new Compiler();
+        $compiler->addDefinition("test", $parameterDefinition);
+
+        $code = $compiler->compile("MyNamespace\\MyContainerWithParameters");
+        file_put_contents(__DIR__.'/Fixtures/Generated/MyContainerWithParameters.php', $code);
+        require __DIR__.'/Fixtures/Generated/MyContainerWithParameters.php';
+
+        $myContainer = new \MyNamespace\MyContainerWithParameters();
+        $result = $myContainer->get("test");
+        $this->assertEquals("value", $result);
+    }
+
+    public function testIsClosure() {
+        $reflection = new \ReflectionClass(Compiler::class);
+        $method = $reflection->getMethod("isClosure");
+        $method->setAccessible(true);
+
+        $this->assertFalse($method->invoke(null, "functionnal"));
+        $this->assertTrue($method->invoke(null, " function  () {}"));
     }
 }
 
