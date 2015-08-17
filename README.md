@@ -1,6 +1,6 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thecodingmachine/yaco/badges/quality-score.png?b=1.0)](https://scrutinizer-ci.com/g/thecodingmachine/yaco/?branch=1.0)
 [![Build Status](https://travis-ci.org/thecodingmachine/yaco.svg?branch=1.0)](https://travis-ci.org/thecodingmachine/yaco)
-[![Coverage Status](https://coveralls.io/repos/thecodingmachine/yaco/badge.svg?branch=master&service=github)](https://coveralls.io/github/thecodingmachine/yaco?branch=1.0)
+[![Coverage Status](https://coveralls.io/repos/thecodingmachine/yaco/badge.svg?branch=1.0&service=github)](https://coveralls.io/github/thecodingmachine/yaco?branch=1.0)
 
 # YACO - Yet another compiler
 
