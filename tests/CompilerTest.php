@@ -45,5 +45,16 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $result = $myContainer->get("test");
         $this->assertEquals("value", $result);
     }
+
+    /**
+     * @expectedException \TheCodingMachine\Yaco\CompilerException
+     */
+    public function testException() {
+        $compiler = new Compiler();
+        $compiler->addDefinition(new InvalidEntryDefinition());
+
+        $code = $compiler->compile("MyNamespace\\MyContainerWithParameters");
+
+    }
 }
 
