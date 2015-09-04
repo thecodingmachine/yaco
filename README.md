@@ -33,11 +33,13 @@ use TheCodingMachine\Yaco\Compiler;
 
 $compiler = new Compiler();
 
-foreach ($definitions as $identifier, $definition) {
+// ...
+
+foreach ($definitions as $definition) {
     /* @var $definition Interop\Container\Compiler\DefinitionInterface */
-    $compiler->addDefinition($identifier, $definition);
+    $compiler->addDefinition($definition);
 }
 
-// Let's dump the code of the class.
+// Let's dump the code of the My\Container class.
 file_put_contents("Container.php", $compiler->compile("My\\Container"));
 ```

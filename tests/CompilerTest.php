@@ -12,7 +12,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $instanceDefinition = new InstanceDefinition("test", "\\stdClass");
 
         $compiler = new Compiler();
-        $compiler->addDefinition("test", $instanceDefinition);
+        $compiler->addDefinition($instanceDefinition);
 
         $code = $compiler->compile("MyNamespace\\MyContainer");
         file_put_contents(__DIR__.'/Fixtures/Generated/MyContainer.php', $code);
@@ -35,7 +35,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $parameterDefinition = new ParameterDefinition("test", "value");
 
         $compiler = new Compiler();
-        $compiler->addDefinition("test", $parameterDefinition);
+        $compiler->addDefinition($parameterDefinition);
 
         $code = $compiler->compile("MyNamespace\\MyContainerWithParameters");
         file_put_contents(__DIR__.'/Fixtures/Generated/MyContainerWithParameters.php', $code);
@@ -44,15 +44,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $myContainer = new \MyNamespace\MyContainerWithParameters();
         $result = $myContainer->get("test");
         $this->assertEquals("value", $result);
-    }
-
-    public function testIsClosure() {
-        $reflection = new \ReflectionClass(Compiler::class);
-        $method = $reflection->getMethod("isClosure");
-        $method->setAccessible(true);
-
-        $this->assertFalse($method->invoke(null, "functionnal"));
-        $this->assertTrue($method->invoke(null, " function  () {}"));
     }
 }
 

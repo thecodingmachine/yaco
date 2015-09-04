@@ -1,6 +1,7 @@
 <?php
 namespace TheCodingMachine\Yaco;
 use Interop\Container\Compiler\DefinitionInterface;
+use Interop\Container\Compiler\InlineEntryInterface;
 
 /**
  * A class that generates a PHP class (a container) from definitions.
@@ -8,10 +9,16 @@ use Interop\Container\Compiler\DefinitionInterface;
 class Compiler
 {
 
+    /**
+     * @var DefinitionInterface[]
+     */
     private $definitions = [];
 
-    public function addDefinition($identifier, DefinitionInterface $definition) {
-        $this->definitions[$identifier] = $definition;
+    /**
+     * @param DefinitionInterface $definition
+     */
+    public function addDefinition(DefinitionInterface $definition) {
+        $this->definitions[$definition->getIdentifier()] = $definition;
     }
 
     /**
@@ -44,11 +51,12 @@ EOF;
         $parametersCode = "";
 
         foreach ($this->definitions as $identifier => $definition) {
-            $phpCode = $definition->toPhpCode();
-            if (self::isClosure($phpCode)) {
-                $closuresCode .= "            ".var_export($identifier, true)." => ".$phpCode.",\n";
+            $inlineEntry = $definition->toPhpCode('$container', ['$container']);
+
+            if ($inlineEntry->isLazilyEvaluated()) {
+                $closuresCode .= "            ".var_export($identifier, true)." => ".$this->getClosureCode($inlineEntry).",\n";
             } else {
-                $parametersCode .= "            ".var_export($identifier, true)." => ".$phpCode.",\n";
+                $parametersCode .= "            ".var_export($identifier, true)." => ".$this->getParametersCode($inlineEntry).",\n";
             }
         }
 
@@ -70,20 +78,16 @@ EOF;
         ];
     }
 
-    /**
-     * Analyzes the PHP code and decides if this should be a closure or not.
-     *
-     * @param string $phpCode
-     * @return bool
-     */
-    private static function isClosure($phpCode) {
-        $phpCode = ltrim($phpCode);
-        if (strpos($phpCode, 'function') === 0) {
-            $phpCode = ltrim(substr($phpCode, 8));
-            if (strpos($phpCode, '(') === 0) {
-                return true;
-            }
+    private function getParametersCode(InlineEntryInterface $inlineEntry) {
+        if (!empty($inlineEntry->getStatements())) {
+            throw new CompilerException('An entry that contains parameters (not lazily loaded) cannot return statements.');
         }
-        return false;
+        return $inlineEntry->getExpression();
+    }
+
+    private function getClosureCode(InlineEntryInterface $inlineEntry) {
+        $code = $inlineEntry->getStatements();
+        $code .= "return ".$inlineEntry->getExpression().";\n";
+        return sprintf("function(\$container) {\n%s}", $code);
     }
 }

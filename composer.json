@@ -24,13 +24,14 @@
         }
     },
     "require": {
-        "container-interop/compiler-interop": "~0.1.0",
+        "container-interop/compiler-interop": "dev-master",
         "container-interop/container-interop": "~1.0",
         "mouf/picotainer": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
-        "mouf/common-container-definitions": "~0.1.0"
+        "mouf/common-container-definitions": "~1.0",
+        "satooshi/php-coveralls": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
