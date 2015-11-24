@@ -36,7 +36,7 @@ $compiler = new Compiler();
 // ...
 
 foreach ($definitions as $definition) {
-    /* @var $definition Interop\Container\Compiler\DefinitionInterface */
+    /* @var $definition TheCodingMachine\Yaco\Definition\DumpableInterface */
     $compiler->addDefinition($definition);
 }
 

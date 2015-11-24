@@ -2,8 +2,8 @@
 namespace TheCodingMachine\Yaco;
 
 
-use Mouf\Container\Definition\InstanceDefinition;
-use Mouf\Container\Definition\ParameterDefinition;
+use TheCodingMachine\Yaco\Definition\InstanceDefinition;
+use TheCodingMachine\Yaco\Definition\ParameterDefinition;
 
 class CompilerTest extends \PHPUnit_Framework_TestCase
 {

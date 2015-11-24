@@ -2,11 +2,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:moufmouf/compiler-interop.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:thecodingmachine/common-container-definitions.git"
+            "url": "git@github.com:moufmouf/definition-interop.git"
         }
     ],
     "name": "thecodingmachine/yaco",

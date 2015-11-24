@@ -1,7 +1,7 @@
 <?php
 namespace TheCodingMachine\Yaco;
-use Interop\Container\Compiler\DefinitionInterface;
-use Interop\Container\Compiler\InlineEntryInterface;
+use TheCodingMachine\Yaco\Definition\DumpableInterface;
+use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
 
 /**
  * A class that generates a PHP class (a container) from definitions.
@@ -10,14 +10,14 @@ class Compiler
 {
 
     /**
-     * @var DefinitionInterface[]
+     * @var DumpableInterface[]
      */
     private $definitions = [];
 
     /**
-     * @param DefinitionInterface $definition
+     * @param DumpableInterface $definition
      */
-    public function addDefinition(DefinitionInterface $definition) {
+    public function addDefinition(DumpableInterface $definition) {
         $this->definitions[$definition->getIdentifier()] = $definition;
     }
 
