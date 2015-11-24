@@ -2,7 +2,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:moufmouf/definition-interop.git"
+            "url": "git@github.com:container-interop/definition-interop.git"
         }
     ],
     "name": "thecodingmachine/yaco",
@@ -20,13 +20,12 @@
         }
     },
     "require": {
-        "container-interop/compiler-interop": "~0.2.0",
+        "container-interop/definition-interop": "dev-master",
         "container-interop/container-interop": "~1.0",
         "mouf/picotainer": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "mouf/common-container-definitions": "~0.2.0",
+        "phpunit/phpunit": "~5.0",
         "satooshi/php-coveralls": "dev-master"
     },
     "minimum-stability": "dev",

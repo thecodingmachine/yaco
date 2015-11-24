@@ -1,6 +1,6 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thecodingmachine/yaco/badges/quality-score.png?b=0.2)](https://scrutinizer-ci.com/g/thecodingmachine/yaco/?branch=0.2)
-[![Build Status](https://travis-ci.org/thecodingmachine/yaco.svg?branch=0.2)](https://travis-ci.org/thecodingmachine/yaco)
-[![Coverage Status](https://coveralls.io/repos/thecodingmachine/yaco/badge.svg?branch=0.2&service=github)](https://coveralls.io/github/thecodingmachine/yaco?branch=0.2)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thecodingmachine/yaco/badges/quality-score.png?b=0.3)](https://scrutinizer-ci.com/g/thecodingmachine/yaco/?branch=0.3)
+[![Build Status](https://travis-ci.org/thecodingmachine/yaco.svg?branch=0.3)](https://travis-ci.org/thecodingmachine/yaco)
+[![Coverage Status](https://coveralls.io/repos/thecodingmachine/yaco/badge.svg?branch=0.3&service=github)](https://coveralls.io/github/thecodingmachine/yaco?branch=0.3)
 
 # YACO - Yet another compiler
 
@@ -14,7 +14,7 @@ You can install this package through Composer:
 ```json
 {
     "require": {
-        "thecodingmachine/yaco": "~0.2.0"
+        "thecodingmachine/yaco": "~0.3.0"
     }
 }
 ```
