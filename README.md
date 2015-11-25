@@ -1,11 +1,11 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thecodingmachine/yaco/badges/quality-score.png?b=0.3)](https://scrutinizer-ci.com/g/thecodingmachine/yaco/?branch=0.3)
-[![Build Status](https://travis-ci.org/thecodingmachine/yaco.svg?branch=0.3)](https://travis-ci.org/thecodingmachine/yaco)
-[![Coverage Status](https://coveralls.io/repos/thecodingmachine/yaco/badge.svg?branch=0.3&service=github)](https://coveralls.io/github/thecodingmachine/yaco?branch=0.3)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thecodingmachine/yaco/badges/quality-score.png?b=1.0)](https://scrutinizer-ci.com/g/thecodingmachine/yaco/?branch=1.0)
+[![Build Status](https://travis-ci.org/thecodingmachine/yaco.svg?branch=1.0)](https://travis-ci.org/thecodingmachine/yaco)
+[![Coverage Status](https://coveralls.io/repos/thecodingmachine/yaco/badge.svg?branch=1.0&service=github)](https://coveralls.io/github/thecodingmachine/yaco?branch=1.0)
 
 # YACO - Yet another compiler
 
 YACO (Yet Another COmpiler) is a PHP tool that generates a PHP container based on entry definitions.
-Entry definitions must be compatible with interfaces defined in [*compiler-interop*](https://github.com/container-interop/compiler-interop/)
+It is fully compatible with entry definitions from [*definition-interop*](https://github.com/container-interop/definition-interop/).
 
 ## Installation
 
@@ -14,7 +14,7 @@ You can install this package through Composer:
 ```json
 {
     "require": {
-        "thecodingmachine/yaco": "~0.3.0"
+        "thecodingmachine/yaco": "~1.0"
     }
 }
 ```
@@ -25,7 +25,7 @@ between minor versions.
 ## Usage
 
 This package contains a `Compiler` class. The goal of this class is to take a number of "entry definitions"
-(as defined in [*compiler-interop*](https://github.com/container-interop/compiler-interop/)) and to transform those
+(as defined in [*definition-interop*](https://github.com/container-interop/definition-interop/)) and to transform those
 into a PHP class that implements the  [`ContainerInterface`](https://github.com/container-interop/container-interop/)
 
 ```php
@@ -36,8 +36,8 @@ $compiler = new Compiler();
 // ...
 
 foreach ($definitions as $definition) {
-    /* @var $definition TheCodingMachine\Yaco\Definition\DumpableInterface */
-    $compiler->addDumpableDefinition($definition);
+    /* @var $definition Interop\Container\Definition\DefinitionInterface */
+    $compiler->addDefinition($definition);
 }
 
 // Let's dump the code of the My\Container class.

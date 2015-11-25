@@ -6,7 +6,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@github.com:mnapoli/assembly.git"
+            "url": "git@github.com:moufmouf/assembly.git"
         }
     ],
     "name": "thecodingmachine/yaco",
