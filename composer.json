@@ -3,6 +3,10 @@
         {
             "type": "vcs",
             "url": "git@github.com:container-interop/definition-interop.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:mnapoli/assembly.git"
         }
     ],
     "name": "thecodingmachine/yaco",
@@ -27,6 +31,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~5.0",
+        "mnapoli/assembly": "dev-master",
         "satooshi/php-coveralls": "dev-master"
     },
     "minimum-stability": "dev",

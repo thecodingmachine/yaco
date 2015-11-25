@@ -1,5 +1,6 @@
 <?php
 namespace TheCodingMachine\Yaco;
+use Interop\Container\Definition\DefinitionInterface;
 use TheCodingMachine\Yaco\Definition\DumpableInterface;
 use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
 
@@ -8,17 +9,54 @@ use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
  */
 class Compiler
 {
+    /**
+     * @var DefinitionInterface[]
+     */
+    private $definitions = [];
+
 
     /**
      * @var DumpableInterface[]
      */
-    private $definitions = [];
+    private $dumpableDefinitions = [];
 
     /**
-     * @param DumpableInterface $definition
+     * The object in charge of converting container-interop definitions to our internal standard.
+     *
+     * @var DefinitionConverterInterface
      */
-    public function addDefinition(DumpableInterface $definition) {
+    private $converter;
+
+    /**
+     * @param DefinitionConverterInterface $converter The object in charge of converting container-interop definitions to our internal standard.
+     */
+    public function __construct(DefinitionConverterInterface $converter = null)
+    {
+        if ($converter === null) {
+            $converter = new DefinitionConverter();
+        }
+        $this->converter = $converter;
+    }
+
+    /**
+     * Adds a definition to the list of definitions managed by this compiler.
+     *
+     * @param DefinitionInterface $definition
+     */
+    public function addDefinition(DefinitionInterface $definition) {
         $this->definitions[$definition->getIdentifier()] = $definition;
+        unset($this->dumpableDefinitions[$definition->getIdentifier()]);
+    }
+
+    /**
+     * Adds a dumpable definition to the list of definitions managed by this compiler.
+     * Note: a "dumpable" definition is a definition represented in Yaco internal format.
+     *
+     * @param DumpableInterface $dumpableDefinition
+     */
+    public function addDumpableDefinition(DumpableInterface $dumpableDefinition) {
+        $this->dumpableDefinitions[$dumpableDefinition->getIdentifier()] = $dumpableDefinition;
+        unset($this->definitions[$dumpableDefinition->getIdentifier()]);
     }
 
     /**
@@ -50,7 +88,11 @@ EOF;
         $closuresCode = "";
         $parametersCode = "";
 
-        foreach ($this->definitions as $identifier => $definition) {
+        // Let's merge dumpable definitions with standard definitions.
+        $convertedDefinitions = array_map([$this->converter, 'convert'], $this->definitions);
+        $allDefinitions = $convertedDefinitions + $this->dumpableDefinitions;
+
+        foreach ($allDefinitions as $identifier => $definition) {
             $inlineEntry = $definition->toPhpCode('$container', ['$container']);
 
             if ($inlineEntry->isLazilyEvaluated()) {

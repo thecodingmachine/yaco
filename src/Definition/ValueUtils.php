@@ -16,6 +16,8 @@ class ValueUtils
     {
         if (is_array($value)) {
             return self::dumpArray($value, $containerVariable, $usedVariables);
+        } elseif ($value instanceof ReferenceInterface) {
+            return self::dumpReference($value, $containerVariable, $usedVariables);
         } elseif ($value instanceof DumpableInterface) {
             return self::dumpDefinition($value, $containerVariable, $usedVariables);
         } elseif (is_object($value) || is_resource($value)) {
@@ -63,7 +65,11 @@ class ValueUtils
         if ($definition->getIdentifier() === null) {
             return $definition->toPhpCode($containerVariable, $usedVariables);
         } else {
-            return new InlineEntry(sprintf("%s->get(%s)", $containerVariable, var_export($definition->getIdentifier(), true)), null, $usedVariables);
+            return self::dumpReference(new Reference($definition->getIdentifier()), $containerVariable, $usedVariables);
         }
+    }
+
+    private static function dumpReference(ReferenceInterface $reference, $containerVariable, array $usedVariables) {
+        return $reference->toPhpCode($containerVariable, $usedVariables);
     }
 }

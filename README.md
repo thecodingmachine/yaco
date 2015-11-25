@@ -37,7 +37,7 @@ $compiler = new Compiler();
 
 foreach ($definitions as $definition) {
     /* @var $definition TheCodingMachine\Yaco\Definition\DumpableInterface */
-    $compiler->addDefinition($definition);
+    $compiler->addDumpableDefinition($definition);
 }
 
 // Let's dump the code of the My\Container class.

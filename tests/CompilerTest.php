@@ -12,7 +12,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $instanceDefinition = new InstanceDefinition("test", "\\stdClass");
 
         $compiler = new Compiler();
-        $compiler->addDefinition($instanceDefinition);
+        $compiler->addDumpableDefinition($instanceDefinition);
 
         $code = $compiler->compile("MyNamespace\\MyContainer");
         file_put_contents(__DIR__.'/Fixtures/Generated/MyContainer.php', $code);
@@ -35,7 +35,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $parameterDefinition = new ParameterDefinition("test", "value");
 
         $compiler = new Compiler();
-        $compiler->addDefinition($parameterDefinition);
+        $compiler->addDumpableDefinition($parameterDefinition);
 
         $code = $compiler->compile("MyNamespace\\MyContainerWithParameters");
         file_put_contents(__DIR__.'/Fixtures/Generated/MyContainerWithParameters.php', $code);
@@ -46,12 +46,27 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("value", $result);
     }
 
+    public function testStandardDefinition() {
+        $instanceDefinition = new \Assembly\InstanceDefinition("test", "\\stdClass");
+
+        $compiler = new Compiler();
+        $compiler->addDefinition($instanceDefinition);
+
+        $code = $compiler->compile("MyNamespace\\MyContainerStandardDefinition");
+        file_put_contents(__DIR__.'/Fixtures/Generated/MyContainerStandardDefinition.php', $code);
+        require __DIR__.'/Fixtures/Generated/MyContainerStandardDefinition.php';
+
+        $myContainer = new \MyNamespace\MyContainer();
+        $result = $myContainer->get("test");
+        $this->assertInstanceOf("\\stdClass", $result);
+    }
+
     /**
      * @expectedException \TheCodingMachine\Yaco\CompilerException
      */
     public function testException() {
         $compiler = new Compiler();
-        $compiler->addDefinition(new InvalidEntryDefinition());
+        $compiler->addDumpableDefinition(new InvalidEntryDefinition());
 
         $code = $compiler->compile("MyNamespace\\MyContainerWithParameters");
 

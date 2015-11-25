@@ -60,6 +60,26 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
         $this->assertEquals("hello", $result->cArg1->cArg1);
     }
 
+    public function testSimpleConstructorWithReferenceClassArguments() {
+        $dependencyDefinition = new InstanceDefinition("dependency", "TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test");
+        $dependencyDefinition->addConstructorArgument("hello");
+
+        $reference = new Reference("dependency");
+
+        $instanceDefinition = new InstanceDefinition("test", "TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test");
+        $instanceDefinition->addConstructorArgument($reference);
+
+        $container = $this->getContainer([
+            "dependency" => $dependencyDefinition,
+            "test" => $instanceDefinition
+        ]);
+        $result = $container->get("test");
+
+        $this->assertInstanceOf("TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test", $result);
+        $this->assertInstanceOf("TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test", $result->cArg1);
+        $this->assertEquals("hello", $result->cArg1->cArg1);
+    }
+
     /**
      * @expectedException \RuntimeException
      */
