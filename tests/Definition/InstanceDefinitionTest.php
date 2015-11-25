@@ -12,7 +12,7 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
         $instanceDefinition->addConstructorArgument(42);
         $instanceDefinition->addConstructorArgument([12, [24, 42]]);
 
-        $this->assertEquals('TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test', $instanceDefinition->getClassName());
+        $this->assertEquals('\\TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test', $instanceDefinition->getClassName());
         $this->assertEquals('test', $instanceDefinition->getIdentifier());
         $this->assertCount(2, $instanceDefinition->getConstructorParameters());
     }

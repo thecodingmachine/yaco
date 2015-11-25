@@ -3,6 +3,7 @@
 namespace TheCodingMachine\Yaco;
 
 use Interop\Container\Definition\DefinitionInterface;
+use Interop\Container\Definition\DefinitionProviderInterface;
 use TheCodingMachine\Yaco\Definition\DumpableInterface;
 use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
 
@@ -48,6 +49,17 @@ class Compiler
     {
         $this->definitions[$definition->getIdentifier()] = $definition;
         unset($this->dumpableDefinitions[$definition->getIdentifier()]);
+    }
+
+    /**
+     * Registers a new definition provider.
+     *
+     * @param DefinitionProviderInterface $definitionProvider
+     */
+    public function register(DefinitionProviderInterface $definitionProvider) {
+        foreach ($definitionProvider->getDefinitions() as $definition) {
+            $this->addDefinition($definition);
+        }
     }
 
     /**

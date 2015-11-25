@@ -2,6 +2,7 @@
 
 namespace TheCodingMachine\Yaco;
 
+use TheCodingMachine\Yaco\Definition\Fixtures\TestDefinitionProvider;
 use TheCodingMachine\Yaco\Definition\InstanceDefinition;
 use TheCodingMachine\Yaco\Definition\ParameterDefinition;
 
@@ -58,7 +59,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         file_put_contents(__DIR__.'/Fixtures/Generated/MyContainerStandardDefinition.php', $code);
         require __DIR__.'/Fixtures/Generated/MyContainerStandardDefinition.php';
 
-        $myContainer = new \MyNamespace\MyContainer();
+        $myContainer = new \MyNamespace\MyContainerStandardDefinition();
         $result = $myContainer->get('test');
         $this->assertInstanceOf('\\stdClass', $result);
     }
@@ -72,5 +73,18 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $compiler->addDumpableDefinition(new InvalidEntryDefinition());
 
         $code = $compiler->compile('MyNamespace\\MyContainerWithParameters');
+    }
+
+    public function testRegister() {
+        $compiler = new Compiler();
+        $compiler->register(new TestDefinitionProvider());
+
+        $code = $compiler->compile('MyNamespace\\MyContainerRegister');
+        file_put_contents(__DIR__.'/Fixtures/Generated/MyContainerRegister.php', $code);
+        require __DIR__.'/Fixtures/Generated/MyContainerRegister.php';
+
+        $myContainer = new \MyNamespace\MyContainerRegister();
+        $result = $myContainer->get('test');
+        $this->assertInstanceOf('\\stdClass', $result);
     }
 }
