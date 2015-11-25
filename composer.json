@@ -31,7 +31,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~4.5",
-        "mnapoli/assembly": "dev-master",
+        "mnapoli/assembly": "dev-methodcall_constructor",
         "satooshi/php-coveralls": "dev-master"
     },
     "minimum-stability": "dev",
