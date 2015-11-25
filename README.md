@@ -5,7 +5,7 @@
 # YACO - Yet another compiler
 
 YACO (Yet Another COmpiler) is a PHP tool that generates a PHP container based on entry definitions.
-Entry definitions must be compatible with interfaces defined in [*compiler-interop*](https://github.com/container-interop/compiler-interop/)
+It is fully compatible with entry definitions from [*definition-interop*](https://github.com/container-interop/definition-interop/).
 
 ## Installation
 
@@ -25,7 +25,7 @@ between minor versions.
 ## Usage
 
 This package contains a `Compiler` class. The goal of this class is to take a number of "entry definitions"
-(as defined in [*compiler-interop*](https://github.com/container-interop/compiler-interop/)) and to transform those
+(as defined in [*definition-interop*](https://github.com/container-interop/definition-interop/)) and to transform those
 into a PHP class that implements the  [`ContainerInterface`](https://github.com/container-interop/container-interop/)
 
 ```php
@@ -36,7 +36,7 @@ $compiler = new Compiler();
 // ...
 
 foreach ($definitions as $definition) {
-    /* @var $definition Interop\Container\Compiler\DefinitionInterface */
+    /* @var $definition Interop\Container\Definition\DefinitionInterface */
     $compiler->addDefinition($definition);
 }
 

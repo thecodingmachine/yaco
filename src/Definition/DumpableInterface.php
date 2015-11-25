@@ -1,12 +1,12 @@
 <?php
 
-namespace TheCodingMachine\Yaco;
+namespace TheCodingMachine\Yaco\Definition;
 
-use TheCodingMachine\Yaco\Definition\DumpableInterface;
-use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
-use TheCodingMachine\Yaco\Definition\InlineEntry;
-
-class InvalidEntryDefinition implements DumpableInterface
+/**
+ * Objects implementing the DumpableInterface represent a definition of a container entry.
+ * They can be "rendered" to PHP code using the toPhpCode() method.
+ */
+interface DumpableInterface
 {
     /**
      * Returns the identifier for this object in the container.
@@ -14,10 +14,7 @@ class InvalidEntryDefinition implements DumpableInterface
      *
      * @return string|null
      */
-    public function getIdentifier()
-    {
-        return 'toto';
-    }
+    public function getIdentifier();
 
     /**
      * Returns an InlineEntryInterface object representing the PHP code necessary to generate
@@ -28,8 +25,5 @@ class InvalidEntryDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
-    {
-        return new InlineEntry('$a', '$a=3;', ['$a'], false);
-    }
+    public function toPhpCode($containerVariable, array $usedVariables = array());
 }
