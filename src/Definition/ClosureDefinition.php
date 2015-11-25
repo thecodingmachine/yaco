@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 use SuperClosure\Analyzer\TokenAnalyzer;
@@ -9,7 +10,6 @@ use SuperClosure\Analyzer\TokenAnalyzer;
  */
 class ClosureDefinition implements DumpableInterface
 {
-
     /**
      * The identifier of the instance in the container.
      *
@@ -28,7 +28,7 @@ class ClosureDefinition implements DumpableInterface
      * Constructs an instance definition.
      *
      * @param string|null $identifier The identifier of the entry in the container. Can be null if the entry is anonymous (declared inline in other instances)
-     * @param \Closure $closure The closure. It should not contain context (i.e. no "use" keyword in the closure definition). It should accept one compulsory parameter: the container.
+     * @param \Closure    $closure    The closure. It should not contain context (i.e. no "use" keyword in the closure definition). It should accept one compulsory parameter: the container.
      */
     public function __construct($identifier, \Closure $closure)
     {
@@ -38,6 +38,7 @@ class ClosureDefinition implements DumpableInterface
 
     /**
      * Returns the identifier of the instance.
+     *
      * @return string
      */
     public function getIdentifier()
@@ -47,6 +48,7 @@ class ClosureDefinition implements DumpableInterface
 
     /**
      * Returns the closure of the parameter.
+     *
      * @return mixed
      */
     public function getClosure()
@@ -59,8 +61,10 @@ class ClosureDefinition implements DumpableInterface
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
+     *
      * @return InlineEntryInterface
+     *
      * @throws DefinitionException
      */
     public function toPhpCode($containerVariable, array $usedVariables = array())
@@ -78,7 +82,8 @@ class ClosureDefinition implements DumpableInterface
         $code = $analysis['code'];
         $variableName = VariableUtils::getNextAvailableVariableName("\$closure", $usedVariables);
         $usedVariables[] = $variableName;
-        $assignClosure = sprintf("%s = %s;", $variableName, $code);
+        $assignClosure = sprintf('%s = %s;', $variableName, $code);
+
         return new InlineEntry($variableName.'('.$containerVariable.')', $assignClosure, $usedVariables);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco;
 
 use Interop\Container\Definition\AliasDefinitionInterface;
@@ -22,9 +23,11 @@ class DefinitionConverter implements DefinitionConverterInterface
 {
     /**
      * @param DefinitionInterface $definition
+     *
      * @return DumpableInterface
      */
-    public function convert(DefinitionInterface $definition) {
+    public function convert(DefinitionInterface $definition)
+    {
         if ($definition instanceof InstanceDefinitionInterface) {
             $yacoInstanceDefinition = new InstanceDefinition($definition->getIdentifier(),
                 $definition->getClassName(),
@@ -37,6 +40,7 @@ class DefinitionConverter implements DefinitionConverterInterface
             foreach ($definition->getMethodCalls() as $methodCall) {
                 $yacoInstanceDefinition->addMethodCall($methodCall->getMethodName(), $this->convertArguments($methodCall->getArguments()));
             }
+
             return $yacoInstanceDefinition;
         } elseif ($definition instanceof FactoryDefinitionInterface) {
             return new FactoryDefinition($definition->getIdentifier(),
@@ -53,13 +57,16 @@ class DefinitionConverter implements DefinitionConverterInterface
 
     /**
      * @param array $arguments
+     *
      * @return array
      */
-    private function convertArguments(array $arguments) {
+    private function convertArguments(array $arguments)
+    {
         $yacoArguments = [];
         foreach ($arguments as $argument) {
             $yacoArguments[] = $this->convertValue($argument);
         }
+
         return $yacoArguments;
     }
 
@@ -78,7 +85,8 @@ class DefinitionConverter implements DefinitionConverterInterface
         }
     }
 
-    private function convertArray(array $values) {
+    private function convertArray(array $values)
+    {
         $result = [];
 
         foreach ($values as $k => $v) {
@@ -88,7 +96,8 @@ class DefinitionConverter implements DefinitionConverterInterface
         return $result;
     }
 
-    private function convertReference(ReferenceInterface $reference) {
+    private function convertReference(ReferenceInterface $reference)
+    {
         return new Reference($reference->getTarget());
     }
 }

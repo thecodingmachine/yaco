@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
@@ -6,7 +7,6 @@ namespace TheCodingMachine\Yaco\Definition;
  */
 class ParameterDefinition implements DumpableInterface
 {
-
     /**
      * The identifier of the instance in the container.
      *
@@ -16,7 +16,7 @@ class ParameterDefinition implements DumpableInterface
 
     /**
      * The value of the parameter.
-     * It is expected to be a scalar or an array (or more generally anything that can be `var_export`ed)
+     * It is expected to be a scalar or an array (or more generally anything that can be `var_export`ed).
      *
      * @var mixed
      */
@@ -26,7 +26,7 @@ class ParameterDefinition implements DumpableInterface
      * Constructs an instance definition.
      *
      * @param string|null $identifier The identifier of the entry in the container. Can be null if the entry is anonymous (declared inline in other instances)
-     * @param string $value The value of the parameter. It is expected to be a scalar or an array (or more generally anything that can be `var_export`ed)
+     * @param string      $value      The value of the parameter. It is expected to be a scalar or an array (or more generally anything that can be `var_export`ed)
      */
     public function __construct($identifier, $value)
     {
@@ -36,6 +36,7 @@ class ParameterDefinition implements DumpableInterface
 
     /**
      * Returns the identifier of the instance.
+     *
      * @return string
      */
     public function getIdentifier()
@@ -45,6 +46,7 @@ class ParameterDefinition implements DumpableInterface
 
     /**
      * Returns the value of the parameter.
+     *
      * @return mixed
      */
     public function getValue()
@@ -57,7 +59,8 @@ class ParameterDefinition implements DumpableInterface
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
+     *
      * @return InlineEntryInterface
      */
     public function toPhpCode($containerVariable, array $usedVariables = array())

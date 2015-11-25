@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
@@ -7,7 +8,6 @@ namespace TheCodingMachine\Yaco\Definition;
  */
 class InstanceDefinition implements DumpableInterface
 {
-
     /**
      * The identifier of the instance in the container.
      *
@@ -30,7 +30,7 @@ class InstanceDefinition implements DumpableInterface
     private $constructorArguments = array();
 
     /**
-     * A list of actions to be executed (can be either a method call or a public property assignation)
+     * A list of actions to be executed (can be either a method call or a public property assignation).
      *
      * @var ActionInterface[]
      */
@@ -39,9 +39,9 @@ class InstanceDefinition implements DumpableInterface
     /**
      * Constructs an instance definition.
      *
-     * @param string|null $identifier The identifier of the instance in the container. Can be null if the instance is anonymous (declared inline of other instances)
-     * @param string $className The fully qualified class name of this instance.
-     * @param array $constructorArguments A list of constructor arguments.
+     * @param string|null $identifier           The identifier of the instance in the container. Can be null if the instance is anonymous (declared inline of other instances)
+     * @param string      $className            The fully qualified class name of this instance.
+     * @param array       $constructorArguments A list of constructor arguments.
      */
     public function __construct($identifier, $className, array $constructorArguments = array())
     {
@@ -52,6 +52,7 @@ class InstanceDefinition implements DumpableInterface
 
     /**
      * Returns the identifier of the instance.
+     *
      * @return string
      */
     public function getIdentifier()
@@ -77,11 +78,15 @@ class InstanceDefinition implements DumpableInterface
 
     /**
      * Adds an argument to the list of arguments to be passed to the constructor.
+     *
      * @param mixed $argument
+     *
      * @return self
      */
-    public function addConstructorArgument($argument) {
+    public function addConstructorArgument($argument)
+    {
         $this->constructorArguments[] = $argument;
+
         return $this;
     }
 
@@ -89,11 +94,14 @@ class InstanceDefinition implements DumpableInterface
      * Adds a method call.
      *
      * @param string $methodName
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return MethodCall
      */
-    public function addMethodCall($methodName, array $arguments = array()) {
+    public function addMethodCall($methodName, array $arguments = array())
+    {
         $this->actions[] = $methodCall = new MethodCall($methodName, $arguments);
+
         return $methodCall;
     }
 
@@ -101,11 +109,14 @@ class InstanceDefinition implements DumpableInterface
      * Adds a method call.
      *
      * @param string $propertyName
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return self
      */
-    public function setProperty($propertyName, $value) {
+    public function setProperty($propertyName, $value)
+    {
         $this->actions[] = new PropertyAssignment($propertyName, $value);
+
         return $this;
     }
 
@@ -114,7 +125,8 @@ class InstanceDefinition implements DumpableInterface
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
+     *
      * @return InlineEntryInterface
      */
     public function toPhpCode($containerVariable, array $usedVariables = array())
@@ -135,6 +147,7 @@ class InstanceDefinition implements DumpableInterface
             $code .= $inlineCode->getStatements()."\n";
             $usedVariables = $inlineCode->getUsedVariables();
         }
+
         return new InlineEntry($variableName, $prependedCode.$code, $usedVariables);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
@@ -23,7 +22,6 @@ class Reference implements ReferenceInterface
         $this->target = $target;
     }
 
-
     /**
      * Returns the identifier for the object in the container.
      *
@@ -39,11 +37,12 @@ class Reference implements ReferenceInterface
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
+     *
      * @return InlineEntryInterface
      */
     public function toPhpCode($containerVariable, array $usedVariables = array())
     {
-        return new InlineEntry(sprintf("%s->get(%s)", $containerVariable, var_export($this->getTarget(), true)), null, $usedVariables);
+        return new InlineEntry(sprintf('%s->get(%s)', $containerVariable, var_export($this->getTarget(), true)), null, $usedVariables);
     }
 }

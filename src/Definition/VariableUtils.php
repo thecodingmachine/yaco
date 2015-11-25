@@ -1,14 +1,15 @@
 <?php
-namespace TheCodingMachine\Yaco\Definition;
 
+namespace TheCodingMachine\Yaco\Definition;
 
 class VariableUtils
 {
     /**
      * Returns the next available variable name to use.
      *
-     * @param string $variable The variable name we wish to use
-     * @param array $usedVariables The list of variable names already used.
+     * @param string $variable      The variable name we wish to use
+     * @param array  $usedVariables The list of variable names already used.
+     *
      * @return string
      */
     public static function getNextAvailableVariableName($variable, array $usedVariables)
@@ -22,10 +23,10 @@ class VariableUtils
 
             $numbers = '';
             while (true) {
-                $lastCharacter = substr($variable, strlen($variable)-1);
+                $lastCharacter = substr($variable, strlen($variable) - 1);
                 if ($lastCharacter >= '0' && $lastCharacter <= '9') {
                     $numbers = $lastCharacter.$numbers;
-                    $variable = substr($variable, 0, strlen($variable)-1);
+                    $variable = substr($variable, 0, strlen($variable) - 1);
                 } else {
                     break;
                 }
@@ -36,10 +37,11 @@ class VariableUtils
             } else {
                 $numbers = (int) $numbers;
             }
-            $numbers++;
+            ++$numbers;
 
             $variable = $variable.$numbers;
         }
+
         return $variable;
     }
 
@@ -51,13 +53,16 @@ class VariableUtils
      * - fo$o => $foo
      *
      * @param string $name
+     *
      * @return string
      */
-    private static function toVariableName($name) {
-        $variableName = preg_replace("/[^A-Za-z0-9]/", '', $name);
+    private static function toVariableName($name)
+    {
+        $variableName = preg_replace('/[^A-Za-z0-9]/', '', $name);
         if ($variableName{0} >= '0' && $variableName{0} <= '9') {
             $variableName = 'a'.$variableName;
         }
+
         return '$'.$variableName;
     }
 }

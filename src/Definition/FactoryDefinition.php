@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
@@ -7,7 +8,6 @@ namespace TheCodingMachine\Yaco\Definition;
  */
 class FactoryDefinition implements DumpableInterface
 {
-
     /**
      * The identifier of the instance in the container.
      *
@@ -39,10 +39,10 @@ class FactoryDefinition implements DumpableInterface
     /**
      * Constructs an factory definition.
      *
-     * @param string|null $identifier The identifier of the instance in the container. Can be null if the instance is anonymous (declared inline of other instances)
-     * @param ReferenceInterface $reference A pointer to the service that the factory method will be called upon
-     * @param string $methodName The name of the factory method
-     * @param array $methodArguments The parameters of the factory method
+     * @param string|null        $identifier      The identifier of the instance in the container. Can be null if the instance is anonymous (declared inline of other instances)
+     * @param ReferenceInterface $reference       A pointer to the service that the factory method will be called upon
+     * @param string             $methodName      The name of the factory method
+     * @param array              $methodArguments The parameters of the factory method
      */
     public function __construct($identifier, ReferenceInterface $reference, $methodName, array $methodArguments = [])
     {
@@ -63,7 +63,7 @@ class FactoryDefinition implements DumpableInterface
     }
 
     /**
-     * Returns a pointer to the service that the factory method will be called upon
+     * Returns a pointer to the service that the factory method will be called upon.
      *
      * @return ReferenceInterface
      */
@@ -73,7 +73,7 @@ class FactoryDefinition implements DumpableInterface
     }
 
     /**
-     * Returns the name of the factory method
+     * Returns the name of the factory method.
      *
      * @return string
      */
@@ -83,7 +83,7 @@ class FactoryDefinition implements DumpableInterface
     }
 
     /**
-     * Returns the parameters of the factory method
+     * Returns the parameters of the factory method.
      *
      * @return array
      */
@@ -93,22 +93,22 @@ class FactoryDefinition implements DumpableInterface
     }
 
     /**
-     * Adds an argument to the method
+     * Adds an argument to the method.
      *
      * @param mixed $argument
      */
     public function addMethodArgument($argument)
     {
-       $this->methodArguments[] = $argument;
+        $this->methodArguments[] = $argument;
     }
-
 
     /**
      * Returns an InlineEntryInterface object representing the PHP code necessary to generate
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
+     *
      * @return InlineEntryInterface
      */
     public function toPhpCode($containerVariable, array $usedVariables = array())
@@ -116,6 +116,7 @@ class FactoryDefinition implements DumpableInterface
         $dumpedArguments = ValueUtils::dumpArguments($this->methodArguments, $containerVariable, $usedVariables);
         $prependedCode = $dumpedArguments->getStatements();
         $code = sprintf("%s->get(%s)->%s(%s);\n", $containerVariable, var_export($this->reference->getTarget(), true), $this->methodName, $dumpedArguments->getExpression());
+
         return new InlineEntry($code, $prependedCode, $usedVariables);
     }
 }

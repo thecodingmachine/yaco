@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
@@ -7,7 +8,7 @@ namespace TheCodingMachine\Yaco\Definition;
 class MethodCall implements ActionInterface
 {
     /**
-     * The name of the method
+     * The name of the method.
      *
      * @var string
      */
@@ -22,8 +23,9 @@ class MethodCall implements ActionInterface
 
     /**
      * MethodCall constructor.
+     *
      * @param string $methodName
-     * @param array $arguments
+     * @param array  $arguments
      */
     public function __construct($methodName, array $arguments = array())
     {
@@ -33,26 +35,32 @@ class MethodCall implements ActionInterface
 
     /**
      * Adds an argument to the list of arguments to be passed to the method.
+     *
      * @param mixed $argument
+     *
      * @return self
      */
-    public function addArgument($argument) {
+    public function addArgument($argument)
+    {
         $this->arguments[] = $argument;
+
         return $this;
     }
 
-
     /**
      * Generates PHP code for the line.
+     *
      * @param string $variableName
      * @param string $containerVariable
-     * @param array $usedVariables
+     * @param array  $usedVariables
+     *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($variableName, $containerVariable, array $usedVariables) {
+    public function toPhpCode($variableName, $containerVariable, array $usedVariables)
+    {
         $dumpedArguments = ValueUtils::dumpArguments($this->arguments, $containerVariable, $usedVariables);
-        $codeLine = sprintf("%s->%s(%s);", $variableName, $this->methodName, $dumpedArguments->getExpression());
+        $codeLine = sprintf('%s->%s(%s);', $variableName, $this->methodName, $dumpedArguments->getExpression());
 
-        return new InlineEntry("", $dumpedArguments->getStatements().$codeLine, $dumpedArguments->getUsedVariables());
+        return new InlineEntry('', $dumpedArguments->getStatements().$codeLine, $dumpedArguments->getUsedVariables());
     }
 }

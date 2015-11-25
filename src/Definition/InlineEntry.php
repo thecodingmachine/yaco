@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
@@ -6,7 +7,6 @@ namespace TheCodingMachine\Yaco\Definition;
  */
 class InlineEntry implements InlineEntryInterface
 {
-
     /**
      * @var string
      */
@@ -28,10 +28,10 @@ class InlineEntry implements InlineEntryInterface
     private $lazyEvaluation;
 
     /**
-     * @param string $expression
-     * @param string $statements
+     * @param string   $expression
+     * @param string   $statements
      * @param string[] $usedVariables
-     * @param bool $lazyEvaluation
+     * @param bool     $lazyEvaluation
      */
     public function __construct($expression, $statements, array $usedVariables, $lazyEvaluation = true)
     {
@@ -41,11 +41,10 @@ class InlineEntry implements InlineEntryInterface
         $this->lazyEvaluation = $lazyEvaluation;
     }
 
-
     /**
      * Returns a list of PHP statements (ending with a ;) that are necessary to
      * build the entry.
-     * For instance, these are valid PHP statements:
+     * For instance, these are valid PHP statements:.
      *
      * "$service = new MyService($container->get('my_dependency'));
      * $service->setStuff('foo');"
@@ -62,7 +61,7 @@ class InlineEntry implements InlineEntryInterface
     /**
      * Returns the PHP expression representing the entry.
      * This must be a string representing a valid PHP expression,
-     * with no ending ;
+     * with no ending ;.
      *
      * For instance, "$service" is a valid PHP expression.
      *
@@ -77,6 +76,7 @@ class InlineEntry implements InlineEntryInterface
      * Returns the list of variables used in the process of creating this
      * entry definition. These variables should not be used by other
      * definitions in the same scope.
+     *
      * @return array
      */
     public function getUsedVariables()
@@ -91,7 +91,8 @@ class InlineEntry implements InlineEntryInterface
      *
      * @return bool
      */
-    public function isLazilyEvaluated() {
+    public function isLazilyEvaluated()
+    {
         return $this->lazyEvaluation;
     }
 }

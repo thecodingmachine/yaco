@@ -1,8 +1,6 @@
 <?php
 
-
 namespace TheCodingMachine\Yaco\Definition;
-
 
 /**
  * Objects implementing the DumpableInterface represent a definition of a container entry.
@@ -23,7 +21,8 @@ interface DumpableInterface
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
+     *
      * @return InlineEntryInterface
      */
     public function toPhpCode($containerVariable, array $usedVariables = array());

@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
@@ -6,7 +7,6 @@ namespace TheCodingMachine\Yaco\Definition;
  */
 class AliasDefinition implements DumpableInterface
 {
-
     /**
      * The identifier of the entry in the container.
      *
@@ -25,7 +25,7 @@ class AliasDefinition implements DumpableInterface
      * Constructs an instance definition.
      *
      * @param string|null $identifier The identifier of the entry in the container. Can be null if the entry is anonymous (declared inline in other instances)
-     * @param string $alias The identifier of the entry we are aliasing.
+     * @param string      $alias      The identifier of the entry we are aliasing.
      */
     public function __construct($identifier, $alias)
     {
@@ -35,6 +35,7 @@ class AliasDefinition implements DumpableInterface
 
     /**
      * Returns the identifier of the instance.
+     *
      * @return string
      */
     public function getIdentifier()
@@ -44,6 +45,7 @@ class AliasDefinition implements DumpableInterface
 
     /**
      * The identifier of the entry we are aliasing.
+     *
      * @return mixed
      */
     public function getAlias()
@@ -56,7 +58,8 @@ class AliasDefinition implements DumpableInterface
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
+     *
      * @return InlineEntryInterface
      */
     public function toPhpCode($containerVariable, array $usedVariables = array())

@@ -1,5 +1,7 @@
 <?php
+
 namespace TheCodingMachine\Yaco;
+
 use Interop\Container\Definition\DefinitionInterface;
 use TheCodingMachine\Yaco\Definition\DumpableInterface;
 use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
@@ -13,7 +15,6 @@ class Compiler
      * @var DefinitionInterface[]
      */
     private $definitions = [];
-
 
     /**
      * @var DumpableInterface[]
@@ -43,7 +44,8 @@ class Compiler
      *
      * @param DefinitionInterface $definition
      */
-    public function addDefinition(DefinitionInterface $definition) {
+    public function addDefinition(DefinitionInterface $definition)
+    {
         $this->definitions[$definition->getIdentifier()] = $definition;
         unset($this->dumpableDefinitions[$definition->getIdentifier()]);
     }
@@ -54,17 +56,19 @@ class Compiler
      *
      * @param DumpableInterface $dumpableDefinition
      */
-    public function addDumpableDefinition(DumpableInterface $dumpableDefinition) {
+    public function addDumpableDefinition(DumpableInterface $dumpableDefinition)
+    {
         $this->dumpableDefinitions[$dumpableDefinition->getIdentifier()] = $dumpableDefinition;
         unset($this->definitions[$dumpableDefinition->getIdentifier()]);
     }
 
     /**
      * @param string $className
+     *
      * @return string
      */
-    public function compile($className) {
-
+    public function compile($className)
+    {
         $classCode = <<<EOF
 <?php
 %s
@@ -85,8 +89,8 @@ EOF;
 
         list($shortClassName, $namespaceLine) = $this->splitFQCN($className);
 
-        $closuresCode = "";
-        $parametersCode = "";
+        $closuresCode = '';
+        $parametersCode = '';
 
         // Let's merge dumpable definitions with standard definitions.
         $convertedDefinitions = array_map([$this->converter, 'convert'], $this->definitions);
@@ -96,40 +100,46 @@ EOF;
             $inlineEntry = $definition->toPhpCode('$container', ['$container']);
 
             if ($inlineEntry->isLazilyEvaluated()) {
-                $closuresCode .= "            ".var_export($identifier, true)." => ".$this->getClosureCode($inlineEntry).",\n";
+                $closuresCode .= '            '.var_export($identifier, true).' => '.$this->getClosureCode($inlineEntry).",\n";
             } else {
-                $parametersCode .= "            ".var_export($identifier, true)." => ".$this->getParametersCode($inlineEntry).",\n";
+                $parametersCode .= '            '.var_export($identifier, true).' => '.$this->getParametersCode($inlineEntry).",\n";
             }
         }
 
         return sprintf($classCode, $namespaceLine, $shortClassName, $closuresCode, $parametersCode);
     }
 
-    private function splitFQCN($className) {
+    private function splitFQCN($className)
+    {
         $pos = strrpos($className, '\\');
         if ($pos !== false) {
-            $shortClassName = substr($className, $pos+1);
-            $namespaceLine = "namespace ".substr($className, 0, $pos).";";
+            $shortClassName = substr($className, $pos + 1);
+            $namespaceLine = 'namespace '.substr($className, 0, $pos).';';
         } else {
             $shortClassName = $className;
-            $namespaceLine = "";
+            $namespaceLine = '';
         }
+
         return [
             $shortClassName,
-            $namespaceLine
+            $namespaceLine,
         ];
     }
 
-    private function getParametersCode(InlineEntryInterface $inlineEntry) {
+    private function getParametersCode(InlineEntryInterface $inlineEntry)
+    {
         if (!empty($inlineEntry->getStatements())) {
             throw new CompilerException('An entry that contains parameters (not lazily loaded) cannot return statements.');
         }
+
         return $inlineEntry->getExpression();
     }
 
-    private function getClosureCode(InlineEntryInterface $inlineEntry) {
+    private function getClosureCode(InlineEntryInterface $inlineEntry)
+    {
         $code = $inlineEntry->getStatements();
-        $code .= "return ".$inlineEntry->getExpression().";\n";
+        $code .= 'return '.$inlineEntry->getExpression().";\n";
+
         return sprintf("function(\$container) {\n%s}", $code);
     }
 }

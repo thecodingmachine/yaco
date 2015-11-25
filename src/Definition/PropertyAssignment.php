@@ -1,13 +1,14 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
- * Represents an assignment of a property
+ * Represents an assignment of a property.
  */
 class PropertyAssignment implements ActionInterface
 {
     /**
-     * The name of the property
+     * The name of the property.
      *
      * @var string
      */
@@ -22,7 +23,7 @@ class PropertyAssignment implements ActionInterface
 
     /**
      * @param string $propertyName
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function __construct($propertyName, $value)
     {
@@ -32,15 +33,18 @@ class PropertyAssignment implements ActionInterface
 
     /**
      * Generates PHP code for the line.
+     *
      * @param string $variableName
      * @param string $containerVariable
-     * @param array $usedVariables
+     * @param array  $usedVariables
+     *
      * @return InlineEntryInterface
      */
     public function toPhpCode($variableName, $containerVariable, array $usedVariables)
     {
         $inlineEntry = ValueUtils::dumpValue($this->value, $containerVariable, $usedVariables);
-        $codeLine = sprintf("%s->%s = %s;", $variableName, $this->propertyName, $inlineEntry->getExpression());
-        return new InlineEntry("", $inlineEntry->getStatements().$codeLine, $inlineEntry->getUsedVariables());
+        $codeLine = sprintf('%s->%s = %s;', $variableName, $this->propertyName, $inlineEntry->getExpression());
+
+        return new InlineEntry('', $inlineEntry->getStatements().$codeLine, $inlineEntry->getUsedVariables());
     }
 }

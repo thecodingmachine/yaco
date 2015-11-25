@@ -1,15 +1,16 @@
 <?php
-namespace TheCodingMachine\Yaco\Definition;
 
+namespace TheCodingMachine\Yaco\Definition;
 
 class ValueUtils
 {
     /**
      * Dumps values.
      *
-     * @param mixed $value
+     * @param mixed  $value
      * @param string $containerVariable
-     * @param array $usedVariables
+     * @param array  $usedVariables
+     *
      * @return InlineEntry
      */
     public static function dumpValue($value, $containerVariable, array $usedVariables)
@@ -27,11 +28,12 @@ class ValueUtils
         }
     }
 
-    public static function dumpArguments($argumentsValues, $containerVariable, array $usedVariables) {
+    public static function dumpArguments($argumentsValues, $containerVariable, array $usedVariables)
+    {
         $arguments = [];
         $prependedCode = [];
         foreach ($argumentsValues as $argument) {
-            $inlineEntry = ValueUtils::dumpValue($argument, $containerVariable, $usedVariables);
+            $inlineEntry = self::dumpValue($argument, $containerVariable, $usedVariables);
             $usedVariables = $inlineEntry->getUsedVariables();
             $arguments[] = $inlineEntry->getExpression();
             if (!empty($inlineEntry->getStatements())) {
@@ -40,10 +42,12 @@ class ValueUtils
         }
         $argumentsCode = implode(', ', $arguments);
         $prependedCodeString = implode("\n", $prependedCode);
+
         return new InlineEntry($argumentsCode, $prependedCodeString, $usedVariables);
     }
 
-    private static function dumpArray(array $value, $containerVariable, array $usedVariables) {
+    private static function dumpArray(array $value, $containerVariable, array $usedVariables)
+    {
         $code = array();
         $prependCode = array();
         foreach ($value as $k => $v) {
@@ -60,7 +64,8 @@ class ValueUtils
         return new InlineEntry(sprintf('array(%s)', implode(', ', $code)), implode("\n", $prependCode), $usedVariables);
     }
 
-    private static function dumpDefinition(DumpableInterface $definition, $containerVariable, array $usedVariables) {
+    private static function dumpDefinition(DumpableInterface $definition, $containerVariable, array $usedVariables)
+    {
         // If the identifier is null, we must inline the definition.
         if ($definition->getIdentifier() === null) {
             return $definition->toPhpCode($containerVariable, $usedVariables);
@@ -69,7 +74,8 @@ class ValueUtils
         }
     }
 
-    private static function dumpReference(ReferenceInterface $reference, $containerVariable, array $usedVariables) {
+    private static function dumpReference(ReferenceInterface $reference, $containerVariable, array $usedVariables)
+    {
         return $reference->toPhpCode($containerVariable, $usedVariables);
     }
 }
