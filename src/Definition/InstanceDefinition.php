@@ -46,7 +46,7 @@ class InstanceDefinition implements DumpableInterface
     public function __construct($identifier, $className, array $constructorArguments = array())
     {
         $this->identifier = $identifier;
-        $this->className = $className;
+        $this->className = '\\'.ltrim($className, '\\');
         $this->constructorArguments = $constructorArguments;
     }
 
