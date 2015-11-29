@@ -4,11 +4,11 @@ namespace TheCodingMachine\Yaco\Definition;
 
 use TheCodingMachine\Yaco\Definition\Fixtures\Test;
 
-class InstanceDefinitionTest extends AbstractDefinitionTest
+class ObjectDefinitionTest extends AbstractDefinitionTest
 {
     public function testGetters()
     {
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addConstructorArgument(42);
         $instanceDefinition->addConstructorArgument([12, [24, 42]]);
 
@@ -19,7 +19,7 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
 
     public function testSimpleEmptyConstructor()
     {
-        $instanceDefinition = new InstanceDefinition('test', '\\stdClass');
+        $instanceDefinition = new ObjectDefinition('test', '\\stdClass');
 
         $container = $this->getContainer([
             'test' => $instanceDefinition,
@@ -31,7 +31,7 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
 
     public function testSimpleConstructorWithArguments()
     {
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addConstructorArgument(42);
         $instanceDefinition->addConstructorArgument([12, [24, 42]]);
 
@@ -47,10 +47,10 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
 
     public function testSimpleConstructorWithReferenceArguments()
     {
-        $dependencyDefinition = new InstanceDefinition('dependency', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $dependencyDefinition = new ObjectDefinition('dependency', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $dependencyDefinition->addConstructorArgument('hello');
 
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addConstructorArgument($dependencyDefinition);
 
         $container = $this->getContainer([
@@ -66,12 +66,12 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
 
     public function testSimpleConstructorWithReferenceClassArguments()
     {
-        $dependencyDefinition = new InstanceDefinition('dependency', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $dependencyDefinition = new ObjectDefinition('dependency', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $dependencyDefinition->addConstructorArgument('hello');
 
         $reference = new Reference('dependency');
 
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addConstructorArgument($reference);
 
         $container = $this->getContainer([
@@ -90,7 +90,7 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
      */
     public function testSimpleConstructorWithException()
     {
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addConstructorArgument(new Test());
 
         $instanceDefinition->toPhpCode('$container', []);
@@ -98,7 +98,7 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
 
     public function testMethodCall()
     {
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addMethodCall('setArg1')->addArgument(42);
 
         $container = $this->getContainer([
@@ -112,7 +112,7 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
 
     public function testPropertyAssignment()
     {
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->setProperty('cArg1', 42);
 
         $container = $this->getContainer([
@@ -127,13 +127,13 @@ class InstanceDefinitionTest extends AbstractDefinitionTest
     public function testInlineDeclaration()
     {
         // null passed as first parameter. This will generate an inline declaration.
-        $dependencyDefinition = new InstanceDefinition(null, 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $dependencyDefinition = new ObjectDefinition(null, 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $dependencyDefinition->addConstructorArgument('hello');
 
-        $dependencyDefinition2 = new InstanceDefinition(null, 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $dependencyDefinition2 = new ObjectDefinition(null, 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $dependencyDefinition2->addConstructorArgument('hello2');
 
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addConstructorArgument($dependencyDefinition);
         $instanceDefinition->addConstructorArgument([$dependencyDefinition2]);
 

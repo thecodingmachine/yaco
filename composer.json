@@ -2,11 +2,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:container-interop/definition-interop.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:mnapoli/assembly.git"
+            "url": "git@github.com:moufmouf/definition-interop-compiler-test-suite.git"
         }
     ],
     "name": "thecodingmachine/yaco",
@@ -24,7 +20,7 @@
         }
     },
     "require": {
-        "container-interop/definition-interop": "dev-master",
+        "container-interop/definition-interop": "~0.1.0",
         "container-interop/container-interop": "^1.0",
         "jeremeamia/superclosure": "^2.0",
         "mouf/picotainer": "^1.0"
@@ -32,7 +28,8 @@
     "require-dev": {
         "phpunit/phpunit": "~4.5",
         "mnapoli/assembly": "dev-master",
-        "satooshi/php-coveralls": "dev-master"
+        "satooshi/php-coveralls": "dev-master",
+        "container-interop/definition-interop-compiler-test-suite": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

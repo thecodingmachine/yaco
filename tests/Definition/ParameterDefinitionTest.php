@@ -26,7 +26,7 @@ class ParameterDefinitionTest extends AbstractDefinitionTest
         // null passed as first parameter. This will generate an inline declaration.
         $dependencyDefinition = new ParameterDefinition(null, 'hello');
 
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addConstructorArgument($dependencyDefinition);
 
         $container = $this->getContainer([

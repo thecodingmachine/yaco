@@ -14,7 +14,7 @@ class AliasDefinitionTest extends AbstractDefinitionTest
 
     public function testSimpleAlias()
     {
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $aliasDefinition = new AliasDefinition('alias', 'test');
 
         $container = $this->getContainer([

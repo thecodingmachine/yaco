@@ -19,7 +19,7 @@ class ConstParameterDefinitionTest extends AbstractDefinitionTest
         // null passed as first parameter. This will generate an inline declaration.
         $dependencyDefinition = new ConstParameterDefinition(null, 'TheCodingMachine\\Yaco\\Definition\\ConstParameterDefinitionTest::TEST_CONST');
 
-        $instanceDefinition = new InstanceDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $instanceDefinition = new ObjectDefinition('test', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $instanceDefinition->addConstructorArgument($dependencyDefinition);
 
         $container = $this->getContainer([
