@@ -6,7 +6,7 @@ namespace TheCodingMachine\Yaco\Definition;
  * This class represents an instance declared using the "new" keyword followed by an optional list of
  * method calls and properties assignations.
  */
-class InstanceDefinition implements DumpableInterface
+class ObjectDefinition implements DumpableInterface
 {
     /**
      * The identifier of the instance in the container.

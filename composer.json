@@ -24,7 +24,7 @@
         }
     },
     "require": {
-        "container-interop/definition-interop": "dev-master",
+        "container-interop/definition-interop": "~0.1.0",
         "container-interop/container-interop": "^1.0",
         "jeremeamia/superclosure": "^2.0",
         "mouf/picotainer": "^1.0"

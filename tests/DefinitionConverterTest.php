@@ -2,8 +2,8 @@
 
 namespace TheCodingMachine\Yaco;
 
-use Assembly\MethodCall;
-use Assembly\PropertyAssignment;
+use Assembly\ObjectInitializer\MethodCall;
+use Assembly\ObjectInitializer\PropertyAssignment;
 use Assembly\Reference;
 use TheCodingMachine\Yaco\Definition\AbstractDefinitionTest;
 
@@ -22,9 +22,9 @@ class DefinitionConverterTest extends AbstractDefinitionTest
 
     public function testInstanceConverter()
     {
-        $referenceDefinition = new \Assembly\InstanceDefinition('foo', '\\stdClass');
+        $referenceDefinition = new \Assembly\ObjectDefinition('foo', '\\stdClass');
 
-        $assemblyDefinition = new \Assembly\InstanceDefinition('bar', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $assemblyDefinition->addConstructorArgument(42);
         $assemblyDefinition->addConstructorArgument(['hello' => 'world', 'foo' => new Reference('foo'), 'fooDirect' => $referenceDefinition]);
 
@@ -46,7 +46,7 @@ class DefinitionConverterTest extends AbstractDefinitionTest
      */
     public function testParameterException()
     {
-        $assemblyDefinition = new \Assembly\InstanceDefinition('foo', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $assemblyDefinition = new \Assembly\ObjectDefinition('foo', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
         $assemblyDefinition->addConstructorArgument(new \stdClass());
 
         $this->converter->convert($assemblyDefinition);
@@ -54,9 +54,9 @@ class DefinitionConverterTest extends AbstractDefinitionTest
 
     public function testInstanceConverterPropertiesAndMethodCalls()
     {
-        $assemblyDefinition = new \Assembly\InstanceDefinition('bar', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
-        $assemblyDefinition->addMethodCall(new MethodCall('setArg1', [42]));
-        $assemblyDefinition->addPropertyAssignment(new PropertyAssignment('cArg2', 43));
+        $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $assemblyDefinition->addMethodCall('setArg1', 42);
+        $assemblyDefinition->addPropertyAssignment('cArg2', 43);
 
         $container = $this->getContainer([
             'bar' => $this->converter->convert($assemblyDefinition),
@@ -84,7 +84,7 @@ class DefinitionConverterTest extends AbstractDefinitionTest
     {
         $aliasDefinition = new \Assembly\AliasDefinition('foo', 'bar');
 
-        $assemblyDefinition = new \Assembly\InstanceDefinition('bar', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
+        $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test');
 
         $container = $this->getContainer([
             'bar' => $this->converter->convert($assemblyDefinition),
@@ -98,10 +98,10 @@ class DefinitionConverterTest extends AbstractDefinitionTest
 
     public function testFactoryConverter()
     {
-        $factoryAssemblyDefinition = new \Assembly\InstanceDefinition('factory', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\TestFactory');
+        $factoryAssemblyDefinition = new \Assembly\ObjectDefinition('factory', 'TheCodingMachine\\Yaco\\Definition\\Fixtures\\TestFactory');
         $factoryAssemblyDefinition->addConstructorArgument(42);
 
-        $assemblyDefinition = new \Assembly\FactoryDefinition('test', new Reference('factory'), 'getTest');
+        $assemblyDefinition = new \Assembly\FactoryCallDefinition('test', new Reference('factory'), 'getTest');
 
         $container = $this->getContainer([
             'factory' => $this->converter->convert($factoryAssemblyDefinition),

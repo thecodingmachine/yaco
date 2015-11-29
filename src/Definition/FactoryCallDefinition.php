@@ -6,7 +6,7 @@ namespace TheCodingMachine\Yaco\Definition;
  * This class represents an instance declared using a call to a method (a factory) from an existing service.
  * The method can be passed any number of arguments.
  */
-class FactoryDefinition implements DumpableInterface
+class FactoryCallDefinition implements DumpableInterface
 {
     /**
      * The identifier of the instance in the container.
@@ -16,11 +16,11 @@ class FactoryDefinition implements DumpableInterface
     private $identifier;
 
     /**
-     * The fully qualified class name of this instance.
+     * The fully qualified class name of this instance, or a fully qualified class name.
      *
      * @var ReferenceInterface
      */
-    private $reference;
+    private $factory;
 
     /**
      * The name of the method to be called.
@@ -40,14 +40,14 @@ class FactoryDefinition implements DumpableInterface
      * Constructs an factory definition.
      *
      * @param string|null        $identifier      The identifier of the instance in the container. Can be null if the instance is anonymous (declared inline of other instances)
-     * @param ReferenceInterface $reference       A pointer to the service that the factory method will be called upon
+     * @param ReferenceInterface $factory       A pointer to the service that the factory method will be called upon, or a fully qualified class name
      * @param string             $methodName      The name of the factory method
      * @param array              $methodArguments The parameters of the factory method
      */
-    public function __construct($identifier, ReferenceInterface $reference, $methodName, array $methodArguments = [])
+    public function __construct($identifier, $factory, $methodName, array $methodArguments = [])
     {
         $this->identifier = $identifier;
-        $this->reference = $reference;
+        $this->factory = $factory;
         $this->methodName = $methodName;
         $this->methodArguments = $methodArguments;
     }
@@ -63,13 +63,13 @@ class FactoryDefinition implements DumpableInterface
     }
 
     /**
-     * Returns a pointer to the service that the factory method will be called upon.
+     * Returns a pointer to the service that the factory method will be called upon, or a fully qualified class name.
      *
-     * @return ReferenceInterface
+     * @return ReferenceInterface|string
      */
-    public function getReference()
+    public function getFactory()
     {
-        return $this->reference;
+        return $this->factory;
     }
 
     /**
@@ -115,7 +115,11 @@ class FactoryDefinition implements DumpableInterface
     {
         $dumpedArguments = ValueUtils::dumpArguments($this->methodArguments, $containerVariable, $usedVariables);
         $prependedCode = $dumpedArguments->getStatements();
-        $code = sprintf("%s->get(%s)->%s(%s);\n", $containerVariable, var_export($this->reference->getTarget(), true), $this->methodName, $dumpedArguments->getExpression());
+        if ($this->factory instanceof ReferenceInterface) {
+            $code = sprintf("%s->get(%s)->%s(%s);\n", $containerVariable, var_export($this->factory->getTarget(), true), $this->methodName, $dumpedArguments->getExpression());
+        } else {
+            $code = sprintf("%s::%s(%s);\n", $this->factory, $this->methodName, $dumpedArguments->getExpression());
+        }
 
         return new InlineEntry($code, $prependedCode, $usedVariables);
     }

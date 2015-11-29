@@ -43,3 +43,6 @@ foreach ($definitions as $definition) {
 // Let's dump the code of the My\Container class.
 file_put_contents("Container.php", $compiler->compile("My\\Container"));
 ```
+
+
+TODO: document the register method.

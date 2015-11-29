@@ -15,4 +15,8 @@ class TestFactory
     {
         return new Test($this->arg, $arg2);
     }
+
+    public static function getStaticTest($arg1) {
+        return new Test($arg1);
+    }
 }

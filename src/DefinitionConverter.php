@@ -4,14 +4,14 @@ namespace TheCodingMachine\Yaco;
 
 use Interop\Container\Definition\AliasDefinitionInterface;
 use Interop\Container\Definition\DefinitionInterface;
-use Interop\Container\Definition\FactoryDefinitionInterface;
-use Interop\Container\Definition\InstanceDefinitionInterface;
+use Interop\Container\Definition\FactoryCallDefinitionInterface;
+use Interop\Container\Definition\ObjectDefinitionInterface;
 use Interop\Container\Definition\ParameterDefinitionInterface;
 use Interop\Container\Definition\ReferenceInterface;
 use TheCodingMachine\Yaco\Definition\AliasDefinition;
 use TheCodingMachine\Yaco\Definition\DumpableInterface;
-use TheCodingMachine\Yaco\Definition\FactoryDefinition;
-use TheCodingMachine\Yaco\Definition\InstanceDefinition;
+use TheCodingMachine\Yaco\Definition\FactoryCallDefinition;
+use TheCodingMachine\Yaco\Definition\ObjectDefinition;
 use TheCodingMachine\Yaco\Definition\ParameterDefinition;
 use TheCodingMachine\Yaco\Definition\Reference;
 
@@ -28,24 +28,25 @@ class DefinitionConverter implements DefinitionConverterInterface
      */
     public function convert(DefinitionInterface $definition)
     {
-        if ($definition instanceof InstanceDefinitionInterface) {
-            $yacoInstanceDefinition = new InstanceDefinition($definition->getIdentifier(),
+        if ($definition instanceof ObjectDefinitionInterface) {
+            $yacoObjectDefinition = new ObjectDefinition($definition->getIdentifier(),
                 $definition->getClassName(),
                 $this->convertArguments($definition->getConstructorArguments()));
 
             foreach ($definition->getPropertyAssignments() as $assignment) {
-                $yacoInstanceDefinition->setProperty($assignment->getPropertyName(), $this->convertValue($assignment->getValue()));
+                $yacoObjectDefinition->setProperty($assignment->getPropertyName(), $this->convertValue($assignment->getValue()));
             }
 
             foreach ($definition->getMethodCalls() as $methodCall) {
-                $yacoInstanceDefinition->addMethodCall($methodCall->getMethodName(), $this->convertArguments($methodCall->getArguments()));
+                $yacoObjectDefinition->addMethodCall($methodCall->getMethodName(), $this->convertArguments($methodCall->getArguments()));
             }
 
-            return $yacoInstanceDefinition;
-        } elseif ($definition instanceof FactoryDefinitionInterface) {
-            return new FactoryDefinition($definition->getIdentifier(),
-                $this->convertReference($definition->getReference()),
-                $definition->getMethodName());
+            return $yacoObjectDefinition;
+        } elseif ($definition instanceof FactoryCallDefinitionInterface) {
+            return new FactoryCallDefinition($definition->getIdentifier(),
+                $this->convertValue($definition->getFactory()),
+                $definition->getMethodName(),
+                $this->convertArguments($definition->getArguments()));
         } elseif ($definition instanceof ParameterDefinitionInterface) {
             return new ParameterDefinition($definition->getIdentifier(), $definition->getValue());
         } elseif ($definition instanceof AliasDefinitionInterface) {

@@ -3,14 +3,14 @@
 namespace TheCodingMachine\Yaco;
 
 use TheCodingMachine\Yaco\Definition\Fixtures\TestDefinitionProvider;
-use TheCodingMachine\Yaco\Definition\InstanceDefinition;
+use TheCodingMachine\Yaco\Definition\ObjectDefinition;
 use TheCodingMachine\Yaco\Definition\ParameterDefinition;
 
 class CompilerTest extends \PHPUnit_Framework_TestCase
 {
     public function testContainer()
     {
-        $instanceDefinition = new InstanceDefinition('test', '\\stdClass');
+        $instanceDefinition = new ObjectDefinition('test', '\\stdClass');
 
         $compiler = new Compiler();
         $compiler->addDumpableDefinition($instanceDefinition);
@@ -50,7 +50,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
     public function testStandardDefinition()
     {
-        $instanceDefinition = new \Assembly\InstanceDefinition('test', '\\stdClass');
+        $instanceDefinition = new \Assembly\ObjectDefinition('test', '\\stdClass');
 
         $compiler = new Compiler();
         $compiler->addDefinition($instanceDefinition);
