@@ -14,7 +14,7 @@ You can install this package through Composer:
 ```json
 {
     "require": {
-        "thecodingmachine/yaco": "~0.3"
+        "thecodingmachine/yaco": "~1.0"
     }
 }
 ```
