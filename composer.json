@@ -1,10 +1,4 @@
 {
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:moufmouf/definition-interop-compiler-test-suite.git"
-        }
-    ],
     "name": "thecodingmachine/yaco",
     "type": "library",
     "description": "YACO (Yet Another COmpiler) is a PHP tool that generates a PHP container based on entry definitions.",
@@ -27,9 +21,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~4.5",
-        "mnapoli/assembly": "dev-master",
+        "mnapoli/assembly": "~0.1.0",
         "satooshi/php-coveralls": "dev-master",
-        "container-interop/definition-interop-compiler-test-suite": "dev-master"
+        "container-interop/definition-interop-compiler-test-suite": "~0.1.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
