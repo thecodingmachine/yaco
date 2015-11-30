@@ -14,7 +14,7 @@ You can install this package through Composer:
 ```json
 {
     "require": {
-        "thecodingmachine/yaco": "~1.0"
+        "thecodingmachine/yaco": "~0.3"
     }
 }
 ```
@@ -44,5 +44,17 @@ foreach ($definitions as $definition) {
 file_put_contents("Container.php", $compiler->compile("My\\Container"));
 ```
 
+You can also directly register a **definition provider** using the *register* method:
 
-TODO: document the register method.
+```php
+use TheCodingMachine\Yaco\Compiler;
+
+$compiler = new Compiler();
+
+// ...
+
+$compiler->register($definitionProvider);
+
+// Let's dump the code of the My\Container class.
+file_put_contents("Container.php", $compiler->compile("My\\Container"));
+```
