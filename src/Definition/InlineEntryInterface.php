@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
@@ -9,7 +10,7 @@ interface InlineEntryInterface
     /**
      * Returns a list of PHP statements (ending with a ;) that are necessary to
      * build the entry.
-     * For instance, these are valid PHP statements:
+     * For instance, these are valid PHP statements:.
      *
      * "$service = new MyService($container->get('my_dependency'));
      * $service->setStuff('foo');"
@@ -23,7 +24,7 @@ interface InlineEntryInterface
     /**
      * Returns the PHP expression representing the entry.
      * This must be a string representing a valid PHP expression,
-     * with no ending ;
+     * with no ending ;.
      *
      * For instance, "$service" is a valid PHP expression.
      *
@@ -35,6 +36,7 @@ interface InlineEntryInterface
      * Returns the list of variables used in the process of creating this
      * entry definition. These variables should not be used by other
      * definitions in the same scope.
+     *
      * @return array
      */
     public function getUsedVariables();

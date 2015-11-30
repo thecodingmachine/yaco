@@ -3,19 +3,10 @@
 namespace TheCodingMachine\Yaco\Definition;
 
 /**
- * Objects implementing the DumpableInterface represent a definition of a container entry.
- * They can be "rendered" to PHP code using the toPhpCode() method.
+ * A reference to a service.
  */
-interface DumpableInterface
+interface ReferenceInterface extends \Interop\Container\Definition\ReferenceInterface
 {
-    /**
-     * Returns the identifier for this object in the container.
-     * If null, classes consuming this definition should assume the definition must be inlined.
-     *
-     * @return string|null
-     */
-    public function getIdentifier();
-
     /**
      * Returns an InlineEntryInterface object representing the PHP code necessary to generate
      * the container entry.

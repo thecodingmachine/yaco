@@ -1,14 +1,11 @@
 <?php
-namespace TheCodingMachine\Yaco\Definition;
 
-use TheCodingMachine\Yaco\Definition\Fixtures\Test;
-use Mouf\Picotainer\Picotainer;
+namespace TheCodingMachine\Yaco\Definition;
 
 class VariableUtilsTest extends \PHPUnit_Framework_TestCase
 {
-
-    public function testGetNextAvailableVariableName() {
-
+    public function testGetNextAvailableVariableName()
+    {
         $this->assertEquals('$a', VariableUtils::getNextAvailableVariableName('a', []));
         $this->assertEquals('$a', VariableUtils::getNextAvailableVariableName('$a', []));
         $this->assertEquals('$a1', VariableUtils::getNextAvailableVariableName('$a', ['$a']));
@@ -19,4 +16,3 @@ class VariableUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('$b', VariableUtils::getNextAvailableVariableName('#${}b', []));
     }
 }
-

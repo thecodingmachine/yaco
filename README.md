@@ -5,7 +5,7 @@
 # YACO - Yet another compiler
 
 YACO (Yet Another COmpiler) is a PHP tool that generates a PHP container based on entry definitions.
-Entry definitions must be compatible with interfaces defined in [*compiler-interop*](https://github.com/container-interop/compiler-interop/)
+It is fully compatible with entry definitions from [*definition-interop*](https://github.com/container-interop/definition-interop/).
 
 ## Installation
 
@@ -25,7 +25,7 @@ between minor versions.
 ## Usage
 
 This package contains a `Compiler` class. The goal of this class is to take a number of "entry definitions"
-(as defined in [*compiler-interop*](https://github.com/container-interop/compiler-interop/)) and to transform those
+(as defined in [*definition-interop*](https://github.com/container-interop/definition-interop/)) and to transform those
 into a PHP class that implements the  [`ContainerInterface`](https://github.com/container-interop/container-interop/)
 
 ```php
@@ -36,9 +36,24 @@ $compiler = new Compiler();
 // ...
 
 foreach ($definitions as $definition) {
-    /* @var $definition TheCodingMachine\Yaco\Definition\DumpableInterface */
+    /* @var $definition Interop\Container\Definition\DefinitionInterface */
     $compiler->addDefinition($definition);
 }
+
+// Let's dump the code of the My\Container class.
+file_put_contents("Container.php", $compiler->compile("My\\Container"));
+```
+
+You can also directly register a **definition provider** using the *register* method:
+
+```php
+use TheCodingMachine\Yaco\Compiler;
+
+$compiler = new Compiler();
+
+// ...
+
+$compiler->register($definitionProvider);
 
 // Let's dump the code of the My\Container class.
 file_put_contents("Container.php", $compiler->compile("My\\Container"));
