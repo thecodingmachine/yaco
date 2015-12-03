@@ -34,9 +34,8 @@ class DefinitionInteropCompatibilityTest extends AbstractDefinitionCompatibility
     {
         $definitions = $definitionProvider->getDefinitions();
         $closures = [];
-        foreach ($definitions as $definition) {
-            $key = $definition->getIdentifier();
-            $yacoDefinition = $this->converter->convert($definition);
+        foreach ($definitions as $key => $definition) {
+            $yacoDefinition = $this->converter->convert($key, $definition);
             $inlineCodeDefinition = $yacoDefinition->toPhpCode('$container', ['$container']);
             $code = $inlineCodeDefinition->getStatements();
             $code .= 'return '.$inlineCodeDefinition->getExpression().";\n";

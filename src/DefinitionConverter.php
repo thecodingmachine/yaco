@@ -7,9 +7,8 @@ use Interop\Container\Definition\DefinitionInterface;
 use Interop\Container\Definition\FactoryCallDefinitionInterface;
 use Interop\Container\Definition\ObjectDefinitionInterface;
 use Interop\Container\Definition\ParameterDefinitionInterface;
-use Interop\Container\Definition\ReferenceInterface;
+use Interop\Container\Definition\ReferenceDefinitionInterface;
 use TheCodingMachine\Yaco\Definition\AliasDefinition;
-use TheCodingMachine\Yaco\Definition\DumpableInterface;
 use TheCodingMachine\Yaco\Definition\FactoryCallDefinition;
 use TheCodingMachine\Yaco\Definition\ObjectDefinition;
 use TheCodingMachine\Yaco\Definition\ParameterDefinition;
@@ -22,14 +21,14 @@ use TheCodingMachine\Yaco\Definition\Reference;
 class DefinitionConverter implements DefinitionConverterInterface
 {
     /**
+     * @param string $identifier
      * @param DefinitionInterface $definition
-     *
-     * @return DumpableInterface
+     * @return AliasDefinition|FactoryCallDefinition|ObjectDefinition|ParameterDefinition
      */
-    public function convert(DefinitionInterface $definition)
+    public function convert($identifier, DefinitionInterface $definition)
     {
         if ($definition instanceof ObjectDefinitionInterface) {
-            $yacoObjectDefinition = new ObjectDefinition($definition->getIdentifier(),
+            $yacoObjectDefinition = new ObjectDefinition($identifier,
                 $definition->getClassName(),
                 $this->convertArguments($definition->getConstructorArguments()));
 
@@ -43,14 +42,18 @@ class DefinitionConverter implements DefinitionConverterInterface
 
             return $yacoObjectDefinition;
         } elseif ($definition instanceof FactoryCallDefinitionInterface) {
-            return new FactoryCallDefinition($definition->getIdentifier(),
+            return new FactoryCallDefinition($identifier,
                 $this->convertValue($definition->getFactory()),
                 $definition->getMethodName(),
                 $this->convertArguments($definition->getArguments()));
         } elseif ($definition instanceof ParameterDefinitionInterface) {
-            return new ParameterDefinition($definition->getIdentifier(), $definition->getValue());
-        } elseif ($definition instanceof AliasDefinitionInterface) {
-            return new AliasDefinition($definition->getIdentifier(), $definition->getTarget());
+            return new ParameterDefinition($identifier, $definition->getValue());
+        } elseif ($definition instanceof ReferenceDefinitionInterface) {
+            if ($identifier !== null) {
+                return new AliasDefinition($identifier, $definition->getTarget());
+            } else {
+                return new Reference($definition->getTarget());
+            }
         } else {
             throw new \RuntimeException(sprintf('Cannot convert object of type "%s"', get_class($definition)));
         }
@@ -74,31 +77,13 @@ class DefinitionConverter implements DefinitionConverterInterface
     private function convertValue($value)
     {
         if (is_array($value)) {
-            return $this->convertArray($value);
+            return array_map([$this, 'convertValue'], $value);
         } elseif ($value instanceof DefinitionInterface) {
-            return $this->convert($value);
-        } elseif ($value instanceof ReferenceInterface) {
-            return $this->convertReference($value);
+            return $this->convert(null, $value);
         } elseif (is_object($value) || is_resource($value)) {
             throw new \RuntimeException('Unable to convert a definition. Parameters cannot be an object or a resource.');
         } else {
             return $value;
         }
-    }
-
-    private function convertArray(array $values)
-    {
-        $result = [];
-
-        foreach ($values as $k => $v) {
-            $result[$k] = $this->convertValue($v);
-        }
-
-        return $result;
-    }
-
-    private function convertReference(ReferenceInterface $reference)
-    {
-        return new Reference($reference->getTarget());
     }
 }
