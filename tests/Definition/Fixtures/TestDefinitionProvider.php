@@ -19,7 +19,7 @@ class TestDefinitionProvider implements DefinitionProviderInterface
     public function getDefinitions()
     {
         return [
-            new ObjectDefinition('test', '\\stdClass')
+            'test' => new ObjectDefinition('\\stdClass')
         ];
     }
 }

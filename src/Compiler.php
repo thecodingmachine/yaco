@@ -43,12 +43,13 @@ class Compiler
     /**
      * Adds a definition to the list of definitions managed by this compiler.
      *
+     * @param string $identifier
      * @param DefinitionInterface $definition
      */
-    public function addDefinition(DefinitionInterface $definition)
+    public function addDefinition($identifier, DefinitionInterface $definition)
     {
-        $this->definitions[$definition->getIdentifier()] = $definition;
-        unset($this->dumpableDefinitions[$definition->getIdentifier()]);
+        $this->definitions[$identifier] = $definition;
+        unset($this->dumpableDefinitions[$identifier]);
     }
 
     /**
@@ -57,8 +58,8 @@ class Compiler
      * @param DefinitionProviderInterface $definitionProvider
      */
     public function register(DefinitionProviderInterface $definitionProvider) {
-        foreach ($definitionProvider->getDefinitions() as $definition) {
-            $this->addDefinition($definition);
+        foreach ($definitionProvider->getDefinitions() as $identifier => $definition) {
+            $this->addDefinition($identifier, $definition);
         }
     }
 
@@ -104,8 +105,12 @@ EOF;
         $closuresCode = '';
         $parametersCode = '';
 
+        $convertedDefinitions = [];
         // Let's merge dumpable definitions with standard definitions.
-        $convertedDefinitions = array_map([$this->converter, 'convert'], $this->definitions);
+        foreach ($this->definitions as $identifier => $definition) {
+            $convertedDefinitions[$identifier] = $this->converter->convert($identifier, $definition);
+        }
+
         $allDefinitions = $convertedDefinitions + $this->dumpableDefinitions;
 
         foreach ($allDefinitions as $identifier => $definition) {

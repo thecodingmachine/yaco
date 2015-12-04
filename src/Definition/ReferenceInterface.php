@@ -5,8 +5,15 @@ namespace TheCodingMachine\Yaco\Definition;
 /**
  * A reference to a service.
  */
-interface ReferenceInterface extends \Interop\Container\Definition\ReferenceInterface
+interface ReferenceInterface
 {
+    /**
+     * Returns the name of the target container entry.
+     *
+     * @return string
+     */
+    public function getTarget();
+
     /**
      * Returns an InlineEntryInterface object representing the PHP code necessary to generate
      * the container entry.

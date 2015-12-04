@@ -50,10 +50,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
     public function testStandardDefinition()
     {
-        $instanceDefinition = new \Assembly\ObjectDefinition('test', '\\stdClass');
+        $instanceDefinition = new \Assembly\ObjectDefinition('\\stdClass');
 
         $compiler = new Compiler();
-        $compiler->addDefinition($instanceDefinition);
+        $compiler->addDefinition('test', $instanceDefinition);
 
         $code = $compiler->compile('MyNamespace\\MyContainerStandardDefinition');
         file_put_contents(__DIR__.'/Fixtures/Generated/MyContainerStandardDefinition.php', $code);
