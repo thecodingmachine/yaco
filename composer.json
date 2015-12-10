@@ -23,7 +23,7 @@
         "phpunit/phpunit": "~4.5",
         "mnapoli/assembly": "dev-master",
         "satooshi/php-coveralls": "dev-master",
-        "container-interop/definition-interop-compiler-test-suite": "dev-master"
+        "container-interop/definition-interop-tests": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
