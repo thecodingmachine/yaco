@@ -2,7 +2,6 @@
 
 namespace TheCodingMachine\Yaco;
 
-use Interop\Container\Definition\AliasDefinitionInterface;
 use Interop\Container\Definition\DefinitionInterface;
 use Interop\Container\Definition\FactoryCallDefinitionInterface;
 use Interop\Container\Definition\ObjectDefinitionInterface;
@@ -21,11 +20,12 @@ use TheCodingMachine\Yaco\Definition\Reference;
 class DefinitionConverter implements DefinitionConverterInterface
 {
     /**
-     * @param string $identifier
-     * @param DefinitionInterface $definition
+     * @param string                    $identifier
+     * @param DefinitionInterface|mixed $definition
+     *
      * @return AliasDefinition|FactoryCallDefinition|ObjectDefinition|ParameterDefinition
      */
-    public function convert($identifier, DefinitionInterface $definition)
+    public function convert($identifier, $definition)
     {
         if ($definition instanceof ObjectDefinitionInterface) {
             $yacoObjectDefinition = new ObjectDefinition($identifier,
@@ -47,13 +47,15 @@ class DefinitionConverter implements DefinitionConverterInterface
                 $definition->getMethodName(),
                 $this->convertArguments($definition->getArguments()));
         } elseif ($definition instanceof ParameterDefinitionInterface) {
-            return new ParameterDefinition($identifier, $definition->getValue());
+            return new ParameterDefinition($identifier, $this->convertValue($definition->getValue()));
         } elseif ($definition instanceof ReferenceDefinitionInterface) {
             if ($identifier !== null) {
                 return new AliasDefinition($identifier, $definition->getTarget());
             } else {
                 return new Reference($definition->getTarget());
             }
+        } elseif (is_scalar($definition) || is_array($definition)) {
+            return new ParameterDefinition($identifier, $this->convertValue($definition));
         } else {
             throw new \RuntimeException(sprintf('Cannot convert object of type "%s"', get_class($definition)));
         }

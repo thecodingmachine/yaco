@@ -40,12 +40,11 @@ class FactoryCallDefinitionTest extends AbstractDefinitionTest
         $instanceDefinition = new FactoryCallDefinition('test', 'TheCodingMachine\Yaco\Definition\Fixtures\TestFactory', 'getStaticTest', [42]);
 
         $container = $this->getContainer([
-            'test' => $instanceDefinition
+            'test' => $instanceDefinition,
         ]);
         $result = $container->get('test');
 
         $this->assertInstanceOf('TheCodingMachine\\Yaco\\Definition\\Fixtures\\Test', $result);
         $this->assertEquals(42, $result->cArg1);
     }
-
 }
