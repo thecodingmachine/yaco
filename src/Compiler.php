@@ -76,6 +76,30 @@ class Compiler
     }
 
     /**
+     * @param string $identifier
+     * @return bool
+     */
+    public function has($identifier) {
+        return isset($this->dumpableDefinitions[$identifier]) || isset($this->definitions[$identifier]);
+    }
+
+    /**
+     * Returns the dumpable definition matching the $identifier
+     * @param string $identifier
+     * @return Definition\AliasDefinition|DumpableInterface|Definition\FactoryCallDefinition|Definition\ObjectDefinition|Definition\ParameterDefinition
+     * @throws CompilerException
+     */
+    public function getDumpableDefinition($identifier) {
+        if (isset($this->dumpableDefinitions[$identifier])) {
+            return $this->dumpableDefinitions[$identifier];
+        } elseif (isset($this->definitions[$identifier])) {
+            return $this->converter->convert($identifier, $this->definitions[$identifier]);
+        } else {
+            throw new CompilerException(sprintf('Unknown identifier in compiler: "%s"', $identifier));
+        }
+    }
+
+    /**
      * @param string $className
      *
      * @return string

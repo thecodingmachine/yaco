@@ -15,9 +15,9 @@ interface DefinitionConverterInterface
      * Converts a definition from container-interop's definition format to Yaco internal format.
      *
      * @param string $identifier The container entry identifier
-     * @param DefinitionInterface $definition The container entry definition
+     * @param DefinitionInterface|mixed $definition The container entry definition
      *
      * @return DumpableInterface
      */
-    public function convert($identifier, DefinitionInterface $definition);
+    public function convert($identifier, $definition);
 }

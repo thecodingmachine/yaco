@@ -24,7 +24,7 @@ class ValueUtils
         } elseif (is_object($value) || is_resource($value)) {
             throw new \RuntimeException('Unable to dump a container if a parameter is an object or a resource.');
         } else {
-            return new InlineEntry(var_export($value, true), null, $usedVariables);
+            return new InlineEntry(var_export($value, true), null, $usedVariables, false);
         }
     }
 

@@ -87,4 +87,39 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $result = $myContainer->get('test');
         $this->assertInstanceOf('\\stdClass', $result);
     }
+
+    public function testHas() {
+        $compiler = new Compiler();
+        $compiler->register(new TestDefinitionProvider());
+
+        $this->assertTrue($compiler->has('test'));
+        $this->assertFalse($compiler->has('not_found'));
+    }
+
+    public function testGetDumpableDefinitionFromDefinitionProvider() {
+        $compiler = new Compiler();
+        $compiler->register(new TestDefinitionProvider());
+
+        $this->assertInstanceOf('TheCodingMachine\\Yaco\\Definition\\ObjectDefinition', $compiler->getDumpableDefinition('test'));
+    }
+
+    public function testGetDumpableDefinition() {
+        $instanceDefinition = new ObjectDefinition('test', '\\stdClass');
+
+        $compiler = new Compiler();
+        $compiler->addDumpableDefinition($instanceDefinition);
+
+
+        $this->assertInstanceOf('TheCodingMachine\\Yaco\\Definition\\ObjectDefinition', $compiler->getDumpableDefinition('test'));
+    }
+
+    /**
+     * @expectedException \TheCodingMachine\Yaco\CompilerException
+     * @throws CompilerException
+     */
+    public function testGetDumpableDefinitionException() {
+        $compiler = new Compiler();
+
+        $compiler->getDumpableDefinition('test');
+    }
 }
