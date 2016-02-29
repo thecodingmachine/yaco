@@ -2,7 +2,6 @@
 
 namespace TheCodingMachine\Yaco;
 
-use Interop\Container\Definition\AliasDefinitionInterface;
 use Interop\Container\Definition\DefinitionInterface;
 use Interop\Container\Definition\FactoryCallDefinitionInterface;
 use Interop\Container\Definition\ObjectDefinitionInterface;
@@ -21,8 +20,9 @@ use TheCodingMachine\Yaco\Definition\Reference;
 class DefinitionConverter implements DefinitionConverterInterface
 {
     /**
-     * @param string $identifier
+     * @param string                    $identifier
      * @param DefinitionInterface|mixed $definition
+     *
      * @return AliasDefinition|FactoryCallDefinition|ObjectDefinition|ParameterDefinition
      */
     public function convert($identifier, $definition)
