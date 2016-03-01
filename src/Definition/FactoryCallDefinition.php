@@ -40,7 +40,7 @@ class FactoryCallDefinition implements DumpableInterface
      * Constructs an factory definition.
      *
      * @param string|null        $identifier      The identifier of the instance in the container. Can be null if the instance is anonymous (declared inline of other instances)
-     * @param ReferenceInterface $factory       A pointer to the service that the factory method will be called upon, or a fully qualified class name
+     * @param ReferenceInterface $factory         A pointer to the service that the factory method will be called upon, or a fully qualified class name
      * @param string             $methodName      The name of the factory method
      * @param array              $methodArguments The parameters of the factory method
      */

@@ -65,6 +65,6 @@ class ParameterDefinition implements DumpableInterface
      */
     public function toPhpCode($containerVariable, array $usedVariables = array())
     {
-        return new InlineEntry(var_export($this->value, true), null, $usedVariables, false);
+        return ValueUtils::dumpValue($this->value, $containerVariable, $usedVariables);
     }
 }

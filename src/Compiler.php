@@ -43,7 +43,7 @@ class Compiler
     /**
      * Adds a definition to the list of definitions managed by this compiler.
      *
-     * @param string $identifier
+     * @param string              $identifier
      * @param DefinitionInterface $definition
      */
     public function addDefinition($identifier, DefinitionInterface $definition)
@@ -57,7 +57,8 @@ class Compiler
      *
      * @param DefinitionProviderInterface $definitionProvider
      */
-    public function register(DefinitionProviderInterface $definitionProvider) {
+    public function register(DefinitionProviderInterface $definitionProvider)
+    {
         foreach ($definitionProvider->getDefinitions() as $identifier => $definition) {
             $this->addDefinition($identifier, $definition);
         }
@@ -73,6 +74,36 @@ class Compiler
     {
         $this->dumpableDefinitions[$dumpableDefinition->getIdentifier()] = $dumpableDefinition;
         unset($this->definitions[$dumpableDefinition->getIdentifier()]);
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return bool
+     */
+    public function has($identifier)
+    {
+        return isset($this->dumpableDefinitions[$identifier]) || isset($this->definitions[$identifier]);
+    }
+
+    /**
+     * Returns the dumpable definition matching the $identifier.
+     *
+     * @param string $identifier
+     *
+     * @return Definition\AliasDefinition|DumpableInterface|Definition\FactoryCallDefinition|Definition\ObjectDefinition|Definition\ParameterDefinition
+     *
+     * @throws CompilerException
+     */
+    public function getDumpableDefinition($identifier)
+    {
+        if (isset($this->dumpableDefinitions[$identifier])) {
+            return $this->dumpableDefinitions[$identifier];
+        } elseif (isset($this->definitions[$identifier])) {
+            return $this->converter->convert($identifier, $this->definitions[$identifier]);
+        } else {
+            throw new CompilerException(sprintf('Unknown identifier in compiler: "%s"', $identifier));
+        }
     }
 
     /**
