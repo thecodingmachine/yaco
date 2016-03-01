@@ -118,7 +118,7 @@ class FactoryCallDefinition implements DumpableInterface
         if ($this->factory instanceof ReferenceInterface) {
             $code = sprintf("%s->get(%s)->%s(%s);\n", $containerVariable, var_export($this->factory->getTarget(), true), $this->methodName, $dumpedArguments->getExpression());
         } else {
-            $code = sprintf("%s::%s(%s);\n", $this->factory, $this->methodName, $dumpedArguments->getExpression());
+            $code = sprintf("%s::%s(%s);\n", '\\'.ltrim($this->factory, '\\'), $this->methodName, $dumpedArguments->getExpression());
         }
 
         return new InlineEntry($code, $prependedCode, $usedVariables);
