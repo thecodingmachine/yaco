@@ -7,7 +7,7 @@ use Interop\Container\ServiceProvider;
 
 class TestServiceProviderOverride2 implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
             'serviceA' => [self::class, 'overrideServiceA'],
