@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\Fixtures\ServiceProvider;
 
 use Interop\Container\ContainerInterface;
@@ -9,7 +10,7 @@ class TestServiceProviderOverride2 implements ServiceProvider
     public static function getServices()
     {
         return [
-            'serviceA' => [TestServiceProviderOverride2::class, 'overrideServiceA']
+            'serviceA' => [self::class, 'overrideServiceA'],
         ];
     }
 
@@ -17,6 +18,7 @@ class TestServiceProviderOverride2 implements ServiceProvider
     {
         $serviceA = $previousCallback();
         $serviceA->newProperty2 = 'bar';
+
         return $serviceA;
     }
 }

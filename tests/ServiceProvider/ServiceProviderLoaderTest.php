@@ -1,32 +1,26 @@
 <?php
 
-
 namespace TheCodingMachine\Yaco\ServiceProvider;
 
-use Puli\Discovery\Api\Type\BindingType;
-use Puli\Discovery\Binding\ClassBinding;
-use Puli\Discovery\InMemoryDiscovery;
 use TheCodingMachine\ServiceProvider\Registry;
 use TheCodingMachine\Yaco\Compiler;
 use TheCodingMachine\Yaco\Definition\ParameterDefinition;
-use TheCodingMachine\Yaco\DefinitionConverter;
 use TheCodingMachine\Yaco\Fixtures\ServiceProvider\TestServiceProvider;
 use TheCodingMachine\Yaco\Fixtures\ServiceProvider\TestServiceProviderOverride;
 use TheCodingMachine\Yaco\Fixtures\ServiceProvider\TestServiceProviderOverride2;
 
 class ServiceProviderLoaderTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testLoadServiceProvider()
     {
-        $compiler = new Compiler(new Registry([ TestServiceProvider::class ]));
+        $compiler = new Compiler(new Registry([TestServiceProvider::class]));
         $compiler->addDumpableDefinition(new ParameterDefinition('my_parameter', 'my_value'));
 
         $code = $compiler->compile('MyContainerServiceProvider');
         file_put_contents(__DIR__.'/../Fixtures/Generated/MyContainerServiceProvider.php', $code);
         require __DIR__.'/../Fixtures/Generated/MyContainerServiceProvider.php';
 
-        $myContainer = new \MyContainerServiceProvider(new Registry([ TestServiceProvider::class ]));
+        $myContainer = new \MyContainerServiceProvider(new Registry([TestServiceProvider::class]));
         $result = $myContainer->get('serviceA');
         $this->assertInstanceOf('\\stdClass', $result);
         $this->assertEquals('my_value', $result->serviceB->parameter);
@@ -45,7 +39,7 @@ class ServiceProviderLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $registry = new Registry([
             TestServiceProvider::class,
-            TestServiceProviderOverride::class
+            TestServiceProviderOverride::class,
         ]);
         $compiler = new Compiler($registry);
         $compiler->addDumpableDefinition(new ParameterDefinition('my_parameter', 'my_value'));
@@ -72,7 +66,7 @@ class ServiceProviderLoaderTest extends \PHPUnit_Framework_TestCase
         $registry = new Registry([
             TestServiceProvider::class,
             TestServiceProviderOverride::class,
-            TestServiceProviderOverride2::class
+            TestServiceProviderOverride2::class,
         ]);
         $compiler = new Compiler($registry);
         $compiler->addDumpableDefinition(new ParameterDefinition('my_parameter', 'my_value'));

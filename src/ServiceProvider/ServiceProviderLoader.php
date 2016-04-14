@@ -1,13 +1,11 @@
 <?php
-declare(strict_types=1);
+
+declare (strict_types = 1);
 
 namespace TheCodingMachine\Yaco\ServiceProvider;
 
-
 use Interop\Container\Definition\DefinitionInterface;
 use Interop\Container\ServiceProvider;
-use Puli\Discovery\Api\Discovery;
-use Puli\Discovery\Binding\ClassBinding;
 use TheCodingMachine\ServiceProvider\Registry;
 use TheCodingMachine\Yaco\Compiler;
 use TheCodingMachine\Yaco\CompilerException;
@@ -15,7 +13,6 @@ use TheCodingMachine\Yaco\Definition\AliasDefinition;
 use TheCodingMachine\Yaco\Definition\DumpableInterface;
 use TheCodingMachine\Yaco\Definition\FactoryCallDefinition;
 use TheCodingMachine\Yaco\Definition\Reference;
-use TheCodingMachine\Yaco\DefinitionConverter;
 use TheCodingMachine\Yaco\DefinitionConverterInterface;
 
 class ServiceProviderLoader
@@ -41,9 +38,11 @@ class ServiceProviderLoader
 
     /**
      * Loads the registry into the container.
+     *
      * @param Registry $registry
      */
-    public function loadFromRegistry(Registry $registry) {
+    public function loadFromRegistry(Registry $registry)
+    {
         foreach ($registry as $key => $serviceProvider) {
             $this->loadServiceProvider($serviceProvider, $key);
         }
@@ -51,7 +50,7 @@ class ServiceProviderLoader
 
     /**
      * @param ServiceProvider $serviceProvider
-     * @param int $serviceProviderKey
+     * @param int             $serviceProviderKey
      */
     private function loadServiceProvider(ServiceProvider $serviceProvider, $serviceProviderKey)
     {
@@ -63,13 +62,15 @@ class ServiceProviderLoader
     }
 
     /**
-     * @param string $serviceName
+     * @param string          $serviceName
      * @param ServiceProvider $serviceProvider
-     * @param int $serviceProviderKey
-     * @param callable $callable
+     * @param int             $serviceProviderKey
+     * @param callable        $callable
+     *
      * @throws \TheCodingMachine\Yaco\CompilerException
      */
-    private function registerService($serviceName, $serviceProviderKey, callable $callable) {
+    private function registerService($serviceName, $serviceProviderKey, callable $callable)
+    {
         if (!$this->compiler->has($serviceName)) {
             $definition = $this->getServiceDefinitionFromCallable($serviceName, $serviceName, $serviceProviderKey, $callable, new ContainerDefinition());
 
@@ -107,8 +108,6 @@ class ServiceProviderLoader
                 // @codeCoverageIgnoreEnd
             }
 
-
-
             $callbackWrapperDefinition = new CallbackWrapperDefinition($callbackWrapperName, $innerDefinition);
 
             $definition = $this->getServiceDefinitionFromCallable($decoratedServiceName, $serviceName, $serviceProviderKey, $callable, new ContainerDefinition(), $callbackWrapperDefinition);
@@ -118,35 +117,38 @@ class ServiceProviderLoader
             $this->compiler->addDumpableDefinition($callbackWrapperDefinition);
             $this->compiler->addDumpableDefinition(new AliasDefinition($oldServiceName, $decoratedServiceName));
         }
-
     }
 
     /**
      * @param $serviceName
-     * @param int $serviceProviderKey
-     * @param callable $callable
-     * @param ContainerDefinition $containerDefinition
+     * @param int                            $serviceProviderKey
+     * @param callable                       $callable
+     * @param ContainerDefinition            $containerDefinition
      * @param CallbackWrapperDefinition|null $callbackWrapperDefinition
+     *
      * @return DumpableInterface
      */
-    private function getServiceDefinitionFromCallable($decoratedServiceName, $serviceName, $serviceProviderKey, callable $callable, ContainerDefinition $containerDefinition, CallbackWrapperDefinition $callbackWrapperDefinition = null) {
+    private function getServiceDefinitionFromCallable($decoratedServiceName, $serviceName, $serviceProviderKey, callable $callable, ContainerDefinition $containerDefinition, CallbackWrapperDefinition $callbackWrapperDefinition = null)
+    {
         if ($callable instanceof DefinitionInterface) {
             return $this->converter->convert($decoratedServiceName, $callable);
         }
         if (is_array($callable) && is_string($callable[0])) {
-            $params = [ $containerDefinition ];
+            $params = [$containerDefinition];
             if ($callbackWrapperDefinition) {
                 $params[] = $callbackWrapperDefinition;
             }
+
             return new FactoryCallDefinition($decoratedServiceName, $callable[0], $callable[1], $params);
         } elseif (is_string($callable) && strpos($callable, '::') !== false) {
             $pos = strpos($callable, '::');
             $className = substr($callable, 0, $pos);
-            $methodName = substr($callable, $pos+2);
-            $params = [ $containerDefinition ];
+            $methodName = substr($callable, $pos + 2);
+            $params = [$containerDefinition];
             if ($callbackWrapperDefinition) {
                 $params[] = $callbackWrapperDefinition;
             }
+
             return new FactoryCallDefinition($decoratedServiceName, $className, $methodName, $params);
         }
 
@@ -156,13 +158,16 @@ class ServiceProviderLoader
 
     /**
      * @param string $serviceName
+     *
      * @return string
      */
-    private function getDecoratedServiceName($serviceName) {
+    private function getDecoratedServiceName($serviceName)
+    {
         $counter = 1;
         while ($this->compiler->has($serviceName.'_decorated_'.$counter)) {
-            $counter++;
+            ++$counter;
         }
+
         return $serviceName.'_decorated_'.$counter;
     }
 }

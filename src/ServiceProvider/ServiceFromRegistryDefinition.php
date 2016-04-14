@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\ServiceProvider;
 
 use TheCodingMachine\Yaco\Definition\DumpableInterface;
@@ -6,7 +7,7 @@ use TheCodingMachine\Yaco\Definition\InlineEntry;
 use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
 
 /**
- * Fetches a service from the service-providers registry
+ * Fetches a service from the service-providers registry.
  */
 class ServiceFromRegistryDefinition implements DumpableInterface
 {
@@ -18,7 +19,8 @@ class ServiceFromRegistryDefinition implements DumpableInterface
     private $identifier;
 
     /**
-     * The key of the service provider in the registry
+     * The key of the service provider in the registry.
+     *
      * @var int
      */
     private $serviceProviderKey;
@@ -34,9 +36,9 @@ class ServiceFromRegistryDefinition implements DumpableInterface
     private $serviceName;
 
     /**
-     * @param string|null $identifier
-     * @param string $serviceName
-     * @param int $serviceProviderKey
+     * @param string|null                    $identifier
+     * @param string                         $serviceName
+     * @param int                            $serviceProviderKey
      * @param CallbackWrapperDefinition|null $callbackWrapperDefinition
      */
     public function __construct($identifier, $serviceName, $serviceProviderKey, CallbackWrapperDefinition $callbackWrapperDefinition = null)
@@ -46,7 +48,6 @@ class ServiceFromRegistryDefinition implements DumpableInterface
         $this->serviceProviderKey = $serviceProviderKey;
         $this->callbackWrapperDefinition = $callbackWrapperDefinition;
     }
-
 
     /**
      * Returns the identifier for this object in the container.
@@ -88,7 +89,7 @@ class ServiceFromRegistryDefinition implements DumpableInterface
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
      *
      * @return InlineEntryInterface
      */
@@ -100,6 +101,7 @@ class ServiceFromRegistryDefinition implements DumpableInterface
         }
         $code = sprintf('$this->registry->createService(%s, %s, $this->delegateLookupContainer%s)', var_export($this->serviceProviderKey, true),
             var_export($this->serviceName, true), $previousCode);
+
         return new InlineEntry($code, null, $usedVariables);
     }
 }

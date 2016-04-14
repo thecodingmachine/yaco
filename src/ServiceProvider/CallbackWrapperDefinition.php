@@ -1,4 +1,5 @@
 <?php
+
 namespace TheCodingMachine\Yaco\ServiceProvider;
 
 use TheCodingMachine\Yaco\Definition\DumpableInterface;
@@ -6,7 +7,7 @@ use TheCodingMachine\Yaco\Definition\InlineEntry;
 use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
 
 /**
- * Wraps a definition into a callback (to lazy load it easily)
+ * Wraps a definition into a callback (to lazy load it easily).
  */
 class CallbackWrapperDefinition implements DumpableInterface
 {
@@ -23,7 +24,7 @@ class CallbackWrapperDefinition implements DumpableInterface
     private $wrappedDefinition;
 
     /**
-     * @param null|string $identifier
+     * @param null|string       $identifier
      * @param DumpableInterface $wrappedDefinition
      */
     public function __construct($identifier, DumpableInterface $wrappedDefinition)
@@ -31,7 +32,6 @@ class CallbackWrapperDefinition implements DumpableInterface
         $this->identifier = $identifier;
         $this->wrappedDefinition = $wrappedDefinition;
     }
-
 
     /**
      * Returns the identifier for this object in the container.
@@ -49,7 +49,7 @@ class CallbackWrapperDefinition implements DumpableInterface
      * the container entry.
      *
      * @param string $containerVariable The name of the variable that allows access to the container instance. For instance: "$container", or "$this->container"
-     * @param array $usedVariables An array of variables that are already used and that should not be used when generating this code.
+     * @param array  $usedVariables     An array of variables that are already used and that should not be used when generating this code.
      *
      * @return InlineEntryInterface
      */
@@ -60,6 +60,7 @@ class CallbackWrapperDefinition implements DumpableInterface
     %s
     return %s;
 }', $containerVariable, $innerEntry->getStatements(), $innerEntry->getExpression());
+
         return new InlineEntry($code, null, $usedVariables);
     }
 }

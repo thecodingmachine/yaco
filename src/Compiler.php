@@ -32,13 +32,14 @@ class Compiler
     private $converter;
 
     /**
-     * A registry for registering container-interop's service-providers
+     * A registry for registering container-interop's service-providers.
+     *
      * @var Registry
      */
     private $registry;
 
     /**
-     * @param Registry|null $registry A registry for registering container-interop's service-providers
+     * @param Registry|null                     $registry  A registry for registering container-interop's service-providers
      * @param DefinitionConverterInterface|null $converter The object in charge of converting container-interop definitions to our internal standard.
      */
     public function __construct(Registry $registry = null, DefinitionConverterInterface $converter = null)
@@ -131,7 +132,6 @@ class Compiler
         // Let's fill the definitions from service providers:
         $serviceProviderLoader = new ServiceProviderLoader($this, $this->converter);
         $serviceProviderLoader->loadFromRegistry($this->registry);
-
 
         $classCode = <<<EOF
 <?php
