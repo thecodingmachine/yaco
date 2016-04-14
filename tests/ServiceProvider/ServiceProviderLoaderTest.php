@@ -6,37 +6,27 @@ namespace TheCodingMachine\Yaco\ServiceProvider;
 use Puli\Discovery\Api\Type\BindingType;
 use Puli\Discovery\Binding\ClassBinding;
 use Puli\Discovery\InMemoryDiscovery;
+use TheCodingMachine\ServiceProvider\Registry;
 use TheCodingMachine\Yaco\Compiler;
 use TheCodingMachine\Yaco\Definition\ParameterDefinition;
+use TheCodingMachine\Yaco\DefinitionConverter;
 use TheCodingMachine\Yaco\Fixtures\ServiceProvider\TestServiceProvider;
 use TheCodingMachine\Yaco\Fixtures\ServiceProvider\TestServiceProviderOverride;
+use TheCodingMachine\Yaco\Fixtures\ServiceProvider\TestServiceProviderOverride2;
 
 class ServiceProviderLoaderTest extends \PHPUnit_Framework_TestCase
 {
 
-    /**
-     * @expectedException \TheCodingMachine\Yaco\ServiceProvider\InvalidArgumentException
-     */
-    public function testLoadWrongClass()
-    {
-        $compiler = new Compiler();
-
-        $serviceProviderLoader = new ServiceProviderLoader($compiler);
-        $serviceProviderLoader->load('ThatClassDoesNotExists');
-    }
-
     public function testLoadServiceProvider()
     {
-        $compiler = new Compiler();
+        $compiler = new Compiler(new Registry([ TestServiceProvider::class ]));
         $compiler->addDumpableDefinition(new ParameterDefinition('my_parameter', 'my_value'));
-        $serviceProviderLoader = new ServiceProviderLoader($compiler);
-        $serviceProviderLoader->load(TestServiceProvider::class);
 
         $code = $compiler->compile('MyContainerServiceProvider');
         file_put_contents(__DIR__.'/../Fixtures/Generated/MyContainerServiceProvider.php', $code);
         require __DIR__.'/../Fixtures/Generated/MyContainerServiceProvider.php';
 
-        $myContainer = new \MyContainerServiceProvider();
+        $myContainer = new \MyContainerServiceProvider(new Registry([ TestServiceProvider::class ]));
         $result = $myContainer->get('serviceA');
         $this->assertInstanceOf('\\stdClass', $result);
         $this->assertEquals('my_value', $result->serviceB->parameter);
@@ -46,39 +36,57 @@ class ServiceProviderLoaderTest extends \PHPUnit_Framework_TestCase
 
         $param = $myContainer->get('param');
         $this->assertSame(42, $param);
+
+        $result = $myContainer->get('serviceC');
+        $this->assertInstanceOf('\\stdClass', $result);
     }
 
     public function testLoadServiceProviderWithOverride()
     {
-        $compiler = new Compiler();
+        $registry = new Registry([
+            TestServiceProvider::class,
+            TestServiceProviderOverride::class
+        ]);
+        $compiler = new Compiler($registry);
         $compiler->addDumpableDefinition(new ParameterDefinition('my_parameter', 'my_value'));
-        $serviceProviderLoader = new ServiceProviderLoader($compiler);
-        $serviceProviderLoader->load(TestServiceProvider::class);
-        $serviceProviderLoader->load(TestServiceProviderOverride::class);
 
         $code = $compiler->compile('MyContainerServiceProviderWithOverride');
         file_put_contents(__DIR__.'/../Fixtures/Generated/MyContainerServiceProviderWithOverride.php', $code);
         require __DIR__.'/../Fixtures/Generated/MyContainerServiceProviderWithOverride.php';
 
-        $myContainer = new \MyContainerServiceProviderWithOverride();
+        $myContainer = new \MyContainerServiceProviderWithOverride($registry);
         $result = $myContainer->get('serviceA');
 
         $this->assertInstanceOf('\\stdClass', $result);
         $this->assertEquals('my_value', $result->serviceB->parameter);
         $this->assertEquals('foo', $result->newProperty);
+
+        $result = $myContainer->get('serviceC');
+
+        $this->assertInstanceOf('\\stdClass', $result);
+        $this->assertEquals('baz', $result->newProperty);
     }
 
-    public function testDiscoveryAndLoad()
+    public function testLoadServiceProviderWithDoubleOverride()
     {
-        $discovery = new InMemoryDiscovery();
-        $discovery->addBindingType(new BindingType('container-interop/service-provider'));
-        $classBinding = new ClassBinding(TestServiceProvider::class, 'container-interop/service-provider');
-        $discovery->addBinding($classBinding);
+        $registry = new Registry([
+            TestServiceProvider::class,
+            TestServiceProviderOverride::class,
+            TestServiceProviderOverride2::class
+        ]);
+        $compiler = new Compiler($registry);
+        $compiler->addDumpableDefinition(new ParameterDefinition('my_parameter', 'my_value'));
 
-        $compiler = new Compiler();
-        $serviceProviderLoader = new ServiceProviderLoader($compiler);
-        $serviceProviderLoader->discoverAndLoad($discovery);
+        $code = $compiler->compile('MyContainerServiceProviderWithOverride2');
+        file_put_contents(__DIR__.'/../Fixtures/Generated/MyContainerServiceProviderWithOverride2.php', $code);
+        require __DIR__.'/../Fixtures/Generated/MyContainerServiceProviderWithOverride2.php';
 
-        $this->assertTrue($compiler->has('serviceA'));
+        $myContainer = new \MyContainerServiceProviderWithOverride2($registry);
+        $result = $myContainer->get('serviceA');
+
+        $this->assertInstanceOf('\\stdClass', $result);
+        $this->assertEquals('my_value', $result->serviceB->parameter);
+        $this->assertEquals('foo', $result->newProperty);
+        $this->assertEquals('bar', $result->newProperty2);
     }
 }

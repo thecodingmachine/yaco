@@ -9,15 +9,21 @@ class TestServiceProviderOverride implements ServiceProvider
     public static function getServices()
     {
         return [
-            'serviceA' => [TestServiceProviderOverride::class, 'overrideServiceA']
+            'serviceA' => function(ContainerInterface $container, callable $previousCallback = null)
+            {
+                $serviceA = $previousCallback();
+                $serviceA->newProperty = 'foo';
+                return $serviceA;
+            },
+            'serviceC' => 'TheCodingMachine\\Yaco\\Fixtures\\ServiceProvider\\TestServiceProviderOverride::overrideServiceC'
         ];
     }
 
-    public static function overrideServiceA(ContainerInterface $container, callable $previousCallback = null)
+    public static function overrideServiceC(ContainerInterface $container, callable $previousCallback = null)
     {
-        $serviceA = $previousCallback();
-        $serviceA->newProperty = 'foo';
-        return $serviceA;
+        $serviceC = $previousCallback();
+        $serviceC->newProperty = 'baz';
+        return $serviceC;
     }
 
 }

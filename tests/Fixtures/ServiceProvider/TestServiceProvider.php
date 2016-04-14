@@ -17,6 +17,7 @@ class TestServiceProvider implements ServiceProvider
                 return $instance;
             },
             'serviceB' => [ TestServiceProvider::class, 'createServiceB' ],
+            'serviceC' => 'TheCodingMachine\\Yaco\\Fixtures\\ServiceProvider\\TestServiceProvider::createServiceC',
             'alias' => new Reference('serviceA'),
             'param' => new ParameterDefinition(42)
         ];
@@ -28,5 +29,10 @@ class TestServiceProvider implements ServiceProvider
         // Test getting the database_host parameter.
         $instance->parameter = $container->get('my_parameter');
         return $instance;
+    }
+
+    public static function createServiceC()
+    {
+        return new \stdClass();
     }
 }
