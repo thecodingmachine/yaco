@@ -92,29 +92,29 @@ class ServiceProviderLoader
 
             $oldServiceName = $serviceName;
             $decoratedServiceName = $this->getDecoratedServiceName($serviceName);
-            $innerName = $decoratedServiceName.'.inner';
-            $callbackWrapperName = $decoratedServiceName.'.callbackwrapper';
+            //$innerName = $decoratedServiceName.'.inner';
+            //$callbackWrapperName = $decoratedServiceName.'.callbackwrapper';
 
             // TODO: it would be way easier if we could simply rename a definition!!!
             if ($previousDefinition instanceof FactoryCallDefinition) {
-                $innerDefinition = new FactoryCallDefinition($innerName, $previousDefinition->getFactory(), $previousDefinition->getMethodName(), $previousDefinition->getMethodArguments());
+                $innerDefinition = new FactoryCallDefinition(null /*$innerName*/, $previousDefinition->getFactory(), $previousDefinition->getMethodName(), $previousDefinition->getMethodArguments());
                 // @codeCoverageIgnoreStart
             } elseif ($previousDefinition instanceof ServiceFromRegistryDefinition) {
                 // @codeCoverageIgnoreEnd
-                $innerDefinition = new ServiceFromRegistryDefinition($innerName, $previousDefinition->getServiceName(), $previousDefinition->getServiceProviderKey(), $previousDefinition->getCallbackWrapperDefinition());
+                $innerDefinition = new ServiceFromRegistryDefinition(null /*$innerName*/, $previousDefinition->getServiceName(), $previousDefinition->getServiceProviderKey(), $previousDefinition->getCallbackWrapperDefinition());
             } else {
                 // @codeCoverageIgnoreStart
                 throw new CompilerException('Unable to rename definition from class '.get_class($previousDefinition));
                 // @codeCoverageIgnoreEnd
             }
 
-            $callbackWrapperDefinition = new CallbackWrapperDefinition($callbackWrapperName, $innerDefinition);
+            $callbackWrapperDefinition = new CallbackWrapperDefinition(null /*$callbackWrapperName*/, $innerDefinition);
 
             $definition = $this->getServiceDefinitionFromCallable($decoratedServiceName, $serviceName, $serviceProviderKey, $callable, new ContainerDefinition(), $callbackWrapperDefinition);
 
             $this->compiler->addDumpableDefinition($definition);
-            $this->compiler->addDumpableDefinition($innerDefinition);
-            $this->compiler->addDumpableDefinition($callbackWrapperDefinition);
+            //$this->compiler->addDumpableDefinition($innerDefinition);
+            //$this->compiler->addDumpableDefinition($callbackWrapperDefinition);
             $this->compiler->addDumpableDefinition(new AliasDefinition($oldServiceName, $decoratedServiceName));
         }
     }

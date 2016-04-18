@@ -86,8 +86,12 @@ class Compiler
      */
     public function addDumpableDefinition(DumpableInterface $dumpableDefinition)
     {
-        $this->dumpableDefinitions[$dumpableDefinition->getIdentifier()] = $dumpableDefinition;
-        unset($this->definitions[$dumpableDefinition->getIdentifier()]);
+        $id = $dumpableDefinition->getIdentifier();
+        if ($id === null) {
+            throw new CompilerException('Anonymous instances cannot be directly added to a container.');
+        }
+        $this->dumpableDefinitions[$id] = $dumpableDefinition;
+        unset($this->definitions[$id]);
     }
 
     /**
