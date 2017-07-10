@@ -18,7 +18,7 @@
         "container-interop/container-interop": "^1.0",
         "jeremeamia/superclosure": "^2.0",
         "mouf/picotainer": "^1.0",
-        "thecodingmachine/service-provider-registry": "^1.0"
+        "thecodingmachine/service-provider-registry": "^2.0"
     },
     "repositories": [
         {
