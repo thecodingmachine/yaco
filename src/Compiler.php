@@ -4,8 +4,10 @@ namespace TheCodingMachine\Yaco;
 
 use Interop\Container\Definition\DefinitionInterface;
 use Interop\Container\Definition\DefinitionProviderInterface;
+use TheCodingMachine\ServiceProvider\Registry;
 use TheCodingMachine\Yaco\Definition\DumpableInterface;
 use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
+use TheCodingMachine\Yaco\ServiceProvider\ServiceProviderLoader;
 
 /**
  * A class that generates a PHP class (a container) from definitions.
@@ -30,10 +32,22 @@ class Compiler
     private $converter;
 
     /**
-     * @param DefinitionConverterInterface $converter The object in charge of converting container-interop definitions to our internal standard.
+     * A registry for registering container-interop's service-providers.
+     *
+     * @var Registry
      */
-    public function __construct(DefinitionConverterInterface $converter = null)
+    private $registry;
+
+    /**
+     * @param Registry|null                     $registry  A registry for registering container-interop's service-providers
+     * @param DefinitionConverterInterface|null $converter The object in charge of converting container-interop definitions to our internal standard.
+     */
+    public function __construct(Registry $registry = null, DefinitionConverterInterface $converter = null)
     {
+        if ($registry === null) {
+            $registry = new Registry();
+        }
+        $this->registry = $registry;
         if ($converter === null) {
             $converter = new DefinitionConverter();
         }
@@ -72,8 +86,12 @@ class Compiler
      */
     public function addDumpableDefinition(DumpableInterface $dumpableDefinition)
     {
-        $this->dumpableDefinitions[$dumpableDefinition->getIdentifier()] = $dumpableDefinition;
-        unset($this->definitions[$dumpableDefinition->getIdentifier()]);
+        $id = $dumpableDefinition->getIdentifier();
+        if ($id === null) {
+            throw new CompilerException('Anonymous instances cannot be directly added to a container.');
+        }
+        $this->dumpableDefinitions[$id] = $dumpableDefinition;
+        unset($this->definitions[$id]);
     }
 
     /**
@@ -113,19 +131,36 @@ class Compiler
      */
     public function compile($className)
     {
+        // FIXME: 2 successive calls to compile will yield invalid results as the state is modified by "compile".
+
+        // Let's fill the definitions from service providers:
+        $serviceProviderLoader = new ServiceProviderLoader($this, $this->converter);
+        $serviceProviderLoader->loadFromRegistry($this->registry);
+
         $classCode = <<<EOF
 <?php
 %s
 
 use Mouf\Picotainer\Picotainer;
+use TheCodingMachine\ServiceProvider\Registry;
 
 class %s extends Picotainer
 {
-    public function __construct(ContainerInterface \$delegateLookupContainer = null) {
+    /**
+     * The registry containing service providers.
+     * @var Registry
+     */
+    protected \$registry;
+
+    public function __construct(Registry \$registry = null, ContainerInterface \$delegateLookupContainer = null) {
         parent::__construct([
 %s        ], \$delegateLookupContainer);
         \$this->objects = [
 %s        ];
+        if (\$registry === null) {
+            \$registry = new Registry();
+        }
+        \$this->registry = \$registry;
     }
 }
 

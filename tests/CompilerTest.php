@@ -75,6 +75,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $code = $compiler->compile('MyNamespace\\MyContainerWithParameters');
     }
 
+    /**
+     * @expectedException \TheCodingMachine\Yaco\CompilerException
+     */
+    public function testExceptionOnAnonymousDefinition()
+    {
+        $compiler = new Compiler();
+        $compiler->addDumpableDefinition(new ObjectDefinition(null, '\\stdClass'));
+    }
+
     public function testRegister()
     {
         $compiler = new Compiler();

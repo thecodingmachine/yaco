@@ -23,7 +23,7 @@ class DefinitionConverter implements DefinitionConverterInterface
      * @param string                    $identifier
      * @param DefinitionInterface|mixed $definition
      *
-     * @return AliasDefinition|FactoryCallDefinition|ObjectDefinition|ParameterDefinition
+     * @return AliasDefinition|FactoryCallDefinition|ObjectDefinition|ParameterDefinition|Reference
      */
     public function convert($identifier, $definition)
     {
