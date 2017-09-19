@@ -7,9 +7,9 @@ use TheCodingMachine\Yaco\Definition\InlineEntry;
 use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
 
 /**
- * Wraps a definition into a callback (to lazy load it easily).
+ * Fetches a service from the service-providers registry.
  */
-class CallbackWrapperDefinition implements DumpableInterface
+class CreateServiceFromRegistryDefinition implements DumpableInterface
 {
     /**
      * The identifier of the instance in the container.
@@ -19,18 +19,27 @@ class CallbackWrapperDefinition implements DumpableInterface
     private $identifier;
 
     /**
-     * @var DumpableInterface
+     * The key of the service provider in the registry.
+     *
+     * @var int
      */
-    private $wrappedDefinition;
+    private $serviceProviderKey;
 
     /**
-     * @param null|string       $identifier
-     * @param DumpableInterface $wrappedDefinition
+     * @var string
      */
-    public function __construct($identifier, DumpableInterface $wrappedDefinition)
+    private $serviceName;
+
+    /**
+     * @param string|null                    $identifier
+     * @param string                         $serviceName
+     * @param int                            $serviceProviderKey
+     */
+    public function __construct($identifier, string $serviceName, int $serviceProviderKey)
     {
         $this->identifier = $identifier;
-        $this->wrappedDefinition = $wrappedDefinition;
+        $this->serviceName = $serviceName;
+        $this->serviceProviderKey = $serviceProviderKey;
     }
 
     /**
@@ -45,6 +54,22 @@ class CallbackWrapperDefinition implements DumpableInterface
     }
 
     /**
+     * @return int
+     */
+    public function getServiceProviderKey(): int
+    {
+        return $this->serviceProviderKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceName(): string
+    {
+        return $this->serviceName;
+    }
+
+    /**
      * Returns an InlineEntryInterface object representing the PHP code necessary to generate
      * the container entry.
      *
@@ -55,11 +80,8 @@ class CallbackWrapperDefinition implements DumpableInterface
      */
     public function toPhpCode($containerVariable, array $usedVariables = array())
     {
-        $innerEntry = $this->wrappedDefinition->toPhpCode($containerVariable, $usedVariables);
-        $code = sprintf('function() use (%s) {
-    %s
-    return %s;
-}', $containerVariable, $innerEntry->getStatements(), $innerEntry->getExpression());
+        $code = sprintf('$this->registry->createService(%s, %s, $this->delegateLookupContainer)', var_export($this->serviceProviderKey, true),
+            var_export($this->serviceName, true));
 
         return new InlineEntry($code, null, $usedVariables);
     }

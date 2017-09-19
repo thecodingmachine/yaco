@@ -18,12 +18,20 @@
         "container-interop/container-interop": "^1.0",
         "jeremeamia/superclosure": "^2.0",
         "mouf/picotainer": "^1.0",
-        "thecodingmachine/service-provider-registry": "^2.0"
+        "thecodingmachine/service-provider-registry": "^3.0"
     },
     "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/xhuberty/assembly"
+        },
+        {
+        "type": "vcs",
+        "url": "https://github.com/moufmouf/service-provider.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/moufmouf/service-provider-registry.git"
         }
     ],
     "require-dev": {

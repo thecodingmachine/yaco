@@ -9,7 +9,7 @@ use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
 /**
  * Fetches a service from the service-providers registry.
  */
-class ServiceFromRegistryDefinition implements DumpableInterface
+class ExtendServiceFromRegistryDefinition implements DumpableInterface
 {
     /**
      * The identifier of the instance in the container.
@@ -26,9 +26,9 @@ class ServiceFromRegistryDefinition implements DumpableInterface
     private $serviceProviderKey;
 
     /**
-     * @var CallbackWrapperDefinition
+     * @var DumpableInterface
      */
-    private $callbackWrapperDefinition;
+    private $previousDefinition;
 
     /**
      * @var string
@@ -39,14 +39,14 @@ class ServiceFromRegistryDefinition implements DumpableInterface
      * @param string|null                    $identifier
      * @param string                         $serviceName
      * @param int                            $serviceProviderKey
-     * @param CallbackWrapperDefinition|null $callbackWrapperDefinition
+     * @param DumpableInterface|null $previousDefinition
      */
-    public function __construct($identifier, $serviceName, $serviceProviderKey, CallbackWrapperDefinition $callbackWrapperDefinition = null)
+    public function __construct($identifier, $serviceName, $serviceProviderKey, DumpableInterface $previousDefinition = null)
     {
         $this->identifier = $identifier;
         $this->serviceName = $serviceName;
         $this->serviceProviderKey = $serviceProviderKey;
-        $this->callbackWrapperDefinition = $callbackWrapperDefinition;
+        $this->previousDefinition = $previousDefinition;
     }
 
     /**
@@ -71,9 +71,9 @@ class ServiceFromRegistryDefinition implements DumpableInterface
     /**
      * @return CallbackWrapperDefinition
      */
-    public function getCallbackWrapperDefinition()
+    public function getPreviousDefinition()
     {
-        return $this->callbackWrapperDefinition;
+        return $this->previousDefinition;
     }
 
     /**
@@ -93,13 +93,15 @@ class ServiceFromRegistryDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode($containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         $previousCode = '';
-        if ($this->callbackWrapperDefinition) {
-            $previousCode = ', '.$this->callbackWrapperDefinition->toPhpCode($containerVariable, $usedVariables)->getExpression();
+        if ($this->previousDefinition) {
+            $previousCode = ', '.$this->previousDefinition->toPhpCode($containerVariable, $usedVariables)->getExpression();
+        } else {
+            $previousCode = ', null';
         }
-        $code = sprintf('$this->registry->createService(%s, %s, $this->delegateLookupContainer%s)', var_export($this->serviceProviderKey, true),
+        $code = sprintf('$this->registry->extendService(%s, %s, $this->delegateLookupContainer%s)', var_export($this->serviceProviderKey, true),
             var_export($this->serviceName, true), $previousCode);
 
         return new InlineEntry($code, null, $usedVariables);
