@@ -61,30 +61,6 @@ class ExtendServiceFromRegistryDefinition implements DumpableInterface
     }
 
     /**
-     * @return int
-     */
-    public function getServiceProviderKey()
-    {
-        return $this->serviceProviderKey;
-    }
-
-    /**
-     * @return CallbackWrapperDefinition
-     */
-    public function getPreviousDefinition()
-    {
-        return $this->previousDefinition;
-    }
-
-    /**
-     * @return string
-     */
-    public function getServiceName()
-    {
-        return $this->serviceName;
-    }
-
-    /**
      * Returns an InlineEntryInterface object representing the PHP code necessary to generate
      * the container entry.
      *

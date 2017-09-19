@@ -54,22 +54,6 @@ class CreateServiceFromRegistryDefinition implements DumpableInterface
     }
 
     /**
-     * @return int
-     */
-    public function getServiceProviderKey(): int
-    {
-        return $this->serviceProviderKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getServiceName(): string
-    {
-        return $this->serviceName;
-    }
-
-    /**
      * Returns an InlineEntryInterface object representing the PHP code necessary to generate
      * the container entry.
      *
