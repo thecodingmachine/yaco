@@ -23,15 +23,18 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/xhuberty/assembly"
-        },
-        {
-        "type": "vcs",
-        "url": "https://github.com/moufmouf/service-provider.git"
+            "url": "https://github.com/xhuberty/assembly",
+            "no-api": true
         },
         {
             "type": "vcs",
-            "url": "https://github.com/moufmouf/service-provider-registry.git"
+            "url": "https://github.com/moufmouf/service-provider.git",
+            "no-api": true
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/moufmouf/service-provider-registry.git",
+            "no-api": true
         }
     ],
     "require-dev": {
