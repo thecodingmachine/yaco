@@ -10,7 +10,7 @@ class ConstParameterDefinition implements DumpableInterface
     /**
      * The identifier of the instance in the container.
      *
-     * @var string
+     * @var string|null
      */
     private $identifier;
 
@@ -27,7 +27,7 @@ class ConstParameterDefinition implements DumpableInterface
      * @param string|null $identifier The identifier of the entry in the container. Can be null if the entry is anonymous (declared inline in other instances)
      * @param string      $const      The name of the constant. If it is a class constant, please pass the FQDN. For instance: "My\Class::CONSTANT"
      */
-    public function __construct($identifier, $const)
+    public function __construct(?string $identifier, string $const)
     {
         $this->identifier = $identifier;
         $this->const = $const;
@@ -38,7 +38,7 @@ class ConstParameterDefinition implements DumpableInterface
      *
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
@@ -62,7 +62,7 @@ class ConstParameterDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         return new InlineEntry($this->const, null, $usedVariables, false);
     }

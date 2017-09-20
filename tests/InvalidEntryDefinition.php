@@ -14,7 +14,7 @@ class InvalidEntryDefinition implements DumpableInterface
      *
      * @return string|null
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return 'toto';
     }
@@ -28,7 +28,7 @@ class InvalidEntryDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         return new InlineEntry('$a', '$a=3;', ['$a'], false);
     }

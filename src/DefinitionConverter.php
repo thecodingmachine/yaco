@@ -20,12 +20,12 @@ use TheCodingMachine\Yaco\Definition\Reference;
 class DefinitionConverter implements DefinitionConverterInterface
 {
     /**
-     * @param string                    $identifier
+     * @param string|null               $identifier
      * @param DefinitionInterface|mixed $definition
      *
      * @return AliasDefinition|FactoryCallDefinition|ObjectDefinition|ParameterDefinition|Reference
      */
-    public function convert($identifier, $definition)
+    public function convert(?string $identifier, $definition)
     {
         if ($definition instanceof ObjectDefinitionInterface) {
             $yacoObjectDefinition = new ObjectDefinition($identifier,
@@ -66,7 +66,7 @@ class DefinitionConverter implements DefinitionConverterInterface
      *
      * @return array
      */
-    private function convertArguments(array $arguments)
+    private function convertArguments(array $arguments): array
     {
         $yacoArguments = [];
         foreach ($arguments as $argument) {

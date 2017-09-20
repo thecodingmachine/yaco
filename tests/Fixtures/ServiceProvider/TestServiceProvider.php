@@ -5,11 +5,11 @@ namespace TheCodingMachine\Yaco\Fixtures\ServiceProvider;
 use Assembly\ParameterDefinition;
 use Assembly\Reference;
 use Interop\Container\ContainerInterface;
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 
-class TestServiceProvider implements ServiceProvider
+class TestServiceProvider implements ServiceProviderInterface
 {
-    public function getServices()
+    public function getFactories()
     {
         return [
             'serviceA' => function (ContainerInterface $container) {
@@ -37,5 +37,10 @@ class TestServiceProvider implements ServiceProvider
     public static function createServiceC()
     {
         return new \stdClass();
+    }
+
+    public function getExtensions()
+    {
+        return [];
     }
 }

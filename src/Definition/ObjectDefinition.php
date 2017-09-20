@@ -11,7 +11,7 @@ class ObjectDefinition implements DumpableInterface
     /**
      * The identifier of the instance in the container.
      *
-     * @var string
+     * @var string|null
      */
     private $identifier;
 
@@ -43,7 +43,7 @@ class ObjectDefinition implements DumpableInterface
      * @param string      $className            The fully qualified class name of this instance.
      * @param array       $constructorArguments A list of constructor arguments.
      */
-    public function __construct($identifier, $className, array $constructorArguments = array())
+    public function __construct(?string $identifier, string $className, array $constructorArguments = array())
     {
         $this->identifier = $identifier;
         $this->className = '\\'.ltrim($className, '\\');
@@ -55,7 +55,7 @@ class ObjectDefinition implements DumpableInterface
      *
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
@@ -129,7 +129,7 @@ class ObjectDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         if ($this->identifier !== null) {
             $variableName = $this->getIdentifier();

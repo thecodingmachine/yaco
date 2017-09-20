@@ -11,9 +11,9 @@ class ValueUtils
      * @param string $containerVariable
      * @param array  $usedVariables
      *
-     * @return InlineEntry
+     * @return InlineEntryInterface
      */
-    public static function dumpValue($value, $containerVariable, array $usedVariables)
+    public static function dumpValue($value, $containerVariable, array $usedVariables): InlineEntryInterface
     {
         if (is_array($value)) {
             return self::dumpArray($value, $containerVariable, $usedVariables);
@@ -28,7 +28,7 @@ class ValueUtils
         }
     }
 
-    public static function dumpArguments($argumentsValues, $containerVariable, array $usedVariables)
+    public static function dumpArguments($argumentsValues, $containerVariable, array $usedVariables): InlineEntryInterface
     {
         $arguments = [];
         $prependedCode = [];
@@ -46,7 +46,7 @@ class ValueUtils
         return new InlineEntry($argumentsCode, $prependedCodeString, $usedVariables);
     }
 
-    private static function dumpArray(array $value, $containerVariable, array $usedVariables)
+    private static function dumpArray(array $value, $containerVariable, array $usedVariables): InlineEntryInterface
     {
         $code = array();
         $prependCode = array();
@@ -64,7 +64,7 @@ class ValueUtils
         return new InlineEntry(sprintf('array(%s)', implode(', ', $code)), implode("\n", $prependCode), $usedVariables);
     }
 
-    private static function dumpDefinition(DumpableInterface $definition, $containerVariable, array $usedVariables)
+    private static function dumpDefinition(DumpableInterface $definition, $containerVariable, array $usedVariables): InlineEntryInterface
     {
         // If the identifier is null, we must inline the definition.
         if ($definition->getIdentifier() === null) {
@@ -74,7 +74,7 @@ class ValueUtils
         }
     }
 
-    private static function dumpReference(ReferenceInterface $reference, $containerVariable, array $usedVariables)
+    private static function dumpReference(ReferenceInterface $reference, $containerVariable, array $usedVariables): InlineEntryInterface
     {
         return $reference->toPhpCode($containerVariable, $usedVariables);
     }

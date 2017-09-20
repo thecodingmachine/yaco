@@ -27,7 +27,7 @@ class Reference implements ReferenceInterface
      *
      * @return string
      */
-    public function getTarget()
+    public function getTarget(): string
     {
         return $this->target;
     }
@@ -41,7 +41,7 @@ class Reference implements ReferenceInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         return new InlineEntry(sprintf('%s->get(%s)', $containerVariable, var_export($this->getTarget(), true)), null, $usedVariables);
     }

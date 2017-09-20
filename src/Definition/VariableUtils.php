@@ -12,7 +12,7 @@ class VariableUtils
      *
      * @return string
      */
-    public static function getNextAvailableVariableName($variable, array $usedVariables)
+    public static function getNextAvailableVariableName(string $variable, array $usedVariables): string
     {
         $variable = self::toVariableName($variable);
         while (true) {
@@ -56,7 +56,7 @@ class VariableUtils
      *
      * @return string
      */
-    private static function toVariableName($name)
+    private static function toVariableName(string $name): string
     {
         $variableName = preg_replace('/[^A-Za-z0-9]/', '', $name);
         if ($variableName{0} >= '0' && $variableName{0} <= '9') {

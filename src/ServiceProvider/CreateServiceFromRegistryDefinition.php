@@ -9,7 +9,7 @@ use TheCodingMachine\Yaco\Definition\InlineEntryInterface;
 /**
  * Fetches a service from the service-providers registry.
  */
-class ServiceFromRegistryDefinition implements DumpableInterface
+class CreateServiceFromRegistryDefinition implements DumpableInterface
 {
     /**
      * The identifier of the instance in the container.
@@ -26,11 +26,6 @@ class ServiceFromRegistryDefinition implements DumpableInterface
     private $serviceProviderKey;
 
     /**
-     * @var CallbackWrapperDefinition
-     */
-    private $callbackWrapperDefinition;
-
-    /**
      * @var string
      */
     private $serviceName;
@@ -39,14 +34,12 @@ class ServiceFromRegistryDefinition implements DumpableInterface
      * @param string|null                    $identifier
      * @param string                         $serviceName
      * @param int                            $serviceProviderKey
-     * @param CallbackWrapperDefinition|null $callbackWrapperDefinition
      */
-    public function __construct($identifier, $serviceName, $serviceProviderKey, CallbackWrapperDefinition $callbackWrapperDefinition = null)
+    public function __construct($identifier, string $serviceName, int $serviceProviderKey)
     {
         $this->identifier = $identifier;
         $this->serviceName = $serviceName;
         $this->serviceProviderKey = $serviceProviderKey;
-        $this->callbackWrapperDefinition = $callbackWrapperDefinition;
     }
 
     /**
@@ -55,33 +48,9 @@ class ServiceFromRegistryDefinition implements DumpableInterface
      *
      * @return string|null
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
-    }
-
-    /**
-     * @return int
-     */
-    public function getServiceProviderKey()
-    {
-        return $this->serviceProviderKey;
-    }
-
-    /**
-     * @return CallbackWrapperDefinition
-     */
-    public function getCallbackWrapperDefinition()
-    {
-        return $this->callbackWrapperDefinition;
-    }
-
-    /**
-     * @return string
-     */
-    public function getServiceName()
-    {
-        return $this->serviceName;
     }
 
     /**
@@ -93,14 +62,10 @@ class ServiceFromRegistryDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
-        $previousCode = '';
-        if ($this->callbackWrapperDefinition) {
-            $previousCode = ', '.$this->callbackWrapperDefinition->toPhpCode($containerVariable, $usedVariables)->getExpression();
-        }
-        $code = sprintf('$this->registry->createService(%s, %s, $this->delegateLookupContainer%s)', var_export($this->serviceProviderKey, true),
-            var_export($this->serviceName, true), $previousCode);
+        $code = sprintf('$this->registry->createService(%s, %s, $this->delegateLookupContainer)', var_export($this->serviceProviderKey, true),
+            var_export($this->serviceName, true));
 
         return new InlineEntry($code, null, $usedVariables);
     }
