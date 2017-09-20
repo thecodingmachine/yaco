@@ -19,7 +19,7 @@ interface InlineEntryInterface
      *
      * @return string|null
      */
-    public function getStatements();
+    public function getStatements(): ?string;
 
     /**
      * Returns the PHP expression representing the entry.
@@ -30,7 +30,7 @@ interface InlineEntryInterface
      *
      * @return string
      */
-    public function getExpression();
+    public function getExpression(): string;
 
     /**
      * Returns the list of variables used in the process of creating this
@@ -39,7 +39,7 @@ interface InlineEntryInterface
      *
      * @return array
      */
-    public function getUsedVariables();
+    public function getUsedVariables(): array;
 
     /**
      * If true, the entry will be evaluated when the `get` method is called (this is the default)
@@ -50,5 +50,5 @@ interface InlineEntryInterface
      *
      * @return bool
      */
-    public function isLazilyEvaluated();
+    public function isLazilyEvaluated(): bool;
 }

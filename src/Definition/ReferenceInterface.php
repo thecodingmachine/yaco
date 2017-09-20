@@ -12,7 +12,7 @@ interface ReferenceInterface
      *
      * @return string
      */
-    public function getTarget();
+    public function getTarget(): string;
 
     /**
      * Returns an InlineEntryInterface object representing the PHP code necessary to generate
@@ -23,5 +23,5 @@ interface ReferenceInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array());
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface;
 }

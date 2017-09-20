@@ -13,7 +13,7 @@ class ClosureDefinition implements DumpableInterface
     /**
      * The identifier of the instance in the container.
      *
-     * @var string
+     * @var string|null
      */
     private $identifier;
 
@@ -30,7 +30,7 @@ class ClosureDefinition implements DumpableInterface
      * @param string|null $identifier The identifier of the entry in the container. Can be null if the entry is anonymous (declared inline in other instances)
      * @param \Closure    $closure    The closure. It should not contain context (i.e. no "use" keyword in the closure definition). It should accept one compulsory parameter: the container.
      */
-    public function __construct($identifier, \Closure $closure)
+    public function __construct(?string $identifier, \Closure $closure)
     {
         $this->identifier = $identifier;
         $this->closure = $closure;
@@ -41,7 +41,7 @@ class ClosureDefinition implements DumpableInterface
      *
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
@@ -67,7 +67,7 @@ class ClosureDefinition implements DumpableInterface
      *
      * @throws DefinitionException
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         // TODO: not optimal compared to previous interface!!!
         $analyzer = new TokenAnalyzer();

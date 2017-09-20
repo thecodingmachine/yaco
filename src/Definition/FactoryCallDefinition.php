@@ -11,14 +11,14 @@ class FactoryCallDefinition implements DumpableInterface
     /**
      * The identifier of the instance in the container.
      *
-     * @var string
+     * @var string|null
      */
     private $identifier;
 
     /**
      * The fully qualified class name of this instance, or a fully qualified class name.
      *
-     * @var ReferenceInterface
+     * @var ReferenceInterface|string
      */
     private $factory;
 
@@ -40,11 +40,11 @@ class FactoryCallDefinition implements DumpableInterface
      * Constructs an factory definition.
      *
      * @param string|null        $identifier      The identifier of the instance in the container. Can be null if the instance is anonymous (declared inline of other instances)
-     * @param ReferenceInterface $factory         A pointer to the service that the factory method will be called upon, or a fully qualified class name
+     * @param ReferenceInterface|string $factory         A pointer to the service that the factory method will be called upon, or a fully qualified class name
      * @param string             $methodName      The name of the factory method
      * @param array              $methodArguments The parameters of the factory method
      */
-    public function __construct($identifier, $factory, $methodName, array $methodArguments = [])
+    public function __construct(?string $identifier, $factory, $methodName, array $methodArguments = [])
     {
         $this->identifier = $identifier;
         $this->factory = $factory;
@@ -57,7 +57,7 @@ class FactoryCallDefinition implements DumpableInterface
      *
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
@@ -111,7 +111,7 @@ class FactoryCallDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         $dumpedArguments = ValueUtils::dumpArguments($this->methodArguments, $containerVariable, $usedVariables);
         $prependedCode = $dumpedArguments->getStatements();

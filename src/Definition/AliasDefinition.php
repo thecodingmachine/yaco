@@ -10,7 +10,7 @@ class AliasDefinition implements DumpableInterface
     /**
      * The identifier of the entry in the container.
      *
-     * @var string
+     * @var string|null
      */
     private $identifier;
 
@@ -27,7 +27,7 @@ class AliasDefinition implements DumpableInterface
      * @param string|null $identifier The identifier of the entry in the container. Can be null if the entry is anonymous (declared inline in other instances)
      * @param string      $alias      The identifier of the entry we are aliasing.
      */
-    public function __construct($identifier, $alias)
+    public function __construct(?string $identifier, $alias)
     {
         $this->identifier = $identifier;
         $this->alias = $alias;
@@ -38,7 +38,7 @@ class AliasDefinition implements DumpableInterface
      *
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
@@ -62,7 +62,7 @@ class AliasDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         return new InlineEntry(sprintf('%s->get(%s)', $containerVariable, var_export($this->alias, true)), null, $usedVariables);
     }

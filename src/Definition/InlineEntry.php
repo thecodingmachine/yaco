@@ -13,7 +13,7 @@ class InlineEntry implements InlineEntryInterface
     private $expression;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $statements;
 
@@ -29,11 +29,11 @@ class InlineEntry implements InlineEntryInterface
 
     /**
      * @param string   $expression
-     * @param string   $statements
+     * @param string|null   $statements
      * @param string[] $usedVariables
      * @param bool     $lazyEvaluation
      */
-    public function __construct($expression, $statements, array $usedVariables, $lazyEvaluation = true)
+    public function __construct(string $expression, ?string $statements, array $usedVariables, bool $lazyEvaluation = true)
     {
         $this->expression = $expression;
         $this->statements = $statements;
@@ -53,7 +53,7 @@ class InlineEntry implements InlineEntryInterface
      *
      * @return string|null
      */
-    public function getStatements()
+    public function getStatements(): ?string
     {
         return $this->statements;
     }
@@ -67,7 +67,7 @@ class InlineEntry implements InlineEntryInterface
      *
      * @return string
      */
-    public function getExpression()
+    public function getExpression(): string
     {
         return $this->expression;
     }
@@ -79,7 +79,7 @@ class InlineEntry implements InlineEntryInterface
      *
      * @return array
      */
-    public function getUsedVariables()
+    public function getUsedVariables(): array
     {
         return $this->usedVariables;
     }
@@ -91,7 +91,7 @@ class InlineEntry implements InlineEntryInterface
      *
      * @return bool
      */
-    public function isLazilyEvaluated()
+    public function isLazilyEvaluated(): bool
     {
         return $this->lazyEvaluation;
     }

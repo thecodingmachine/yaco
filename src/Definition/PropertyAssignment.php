@@ -40,7 +40,7 @@ class PropertyAssignment implements ActionInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($variableName, $containerVariable, array $usedVariables)
+    public function toPhpCode($variableName, $containerVariable, array $usedVariables): InlineEntryInterface
     {
         $inlineEntry = ValueUtils::dumpValue($this->value, $containerVariable, $usedVariables);
         $codeLine = sprintf('%s->%s = %s;', $variableName, $this->propertyName, $inlineEntry->getExpression());

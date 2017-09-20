@@ -171,7 +171,7 @@ class ServiceProviderLoader
      *
      * @return DumpableInterface
      */
-    private function getExtendServiceDefinitionFromCallable($decoratedServiceName, $serviceName, $serviceProviderKey, callable $callable, ContainerDefinition $containerDefinition, DumpableInterface $previousDefinition = null)
+    private function getExtendServiceDefinitionFromCallable($decoratedServiceName, $serviceName, $serviceProviderKey, callable $callable, ContainerDefinition $containerDefinition, DumpableInterface $previousDefinition = null): DumpableInterface
     {
         // FIXME: we must split this method in 2. One for the factories and one for the extensions!
 
@@ -197,7 +197,7 @@ class ServiceProviderLoader
      *
      * @return string
      */
-    private function getDecoratedServiceName($serviceName)
+    private function getDecoratedServiceName(string $serviceName): string
     {
         $counter = 1;
         while ($this->compiler->has($serviceName.'_decorated_'.$counter)) {

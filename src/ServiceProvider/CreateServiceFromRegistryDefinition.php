@@ -48,7 +48,7 @@ class CreateServiceFromRegistryDefinition implements DumpableInterface
      *
      * @return string|null
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
@@ -62,7 +62,7 @@ class CreateServiceFromRegistryDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array())
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         $code = sprintf('$this->registry->createService(%s, %s, $this->delegateLookupContainer)', var_export($this->serviceProviderKey, true),
             var_export($this->serviceName, true));

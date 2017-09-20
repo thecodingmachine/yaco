@@ -26,7 +26,7 @@ class ExtendServiceFromRegistryDefinition implements DumpableInterface
     private $serviceProviderKey;
 
     /**
-     * @var DumpableInterface
+     * @var DumpableInterface|null
      */
     private $previousDefinition;
 
@@ -41,7 +41,7 @@ class ExtendServiceFromRegistryDefinition implements DumpableInterface
      * @param int                            $serviceProviderKey
      * @param DumpableInterface|null $previousDefinition
      */
-    public function __construct($identifier, $serviceName, $serviceProviderKey, DumpableInterface $previousDefinition = null)
+    public function __construct(?string $identifier, string $serviceName, int $serviceProviderKey, DumpableInterface $previousDefinition = null)
     {
         $this->identifier = $identifier;
         $this->serviceName = $serviceName;
@@ -55,7 +55,7 @@ class ExtendServiceFromRegistryDefinition implements DumpableInterface
      *
      * @return string|null
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
@@ -69,7 +69,7 @@ class ExtendServiceFromRegistryDefinition implements DumpableInterface
      *
      * @return InlineEntryInterface
      */
-    public function toPhpCode($containerVariable, array $usedVariables = array()): InlineEntryInterface
+    public function toPhpCode(string $containerVariable, array $usedVariables = array()): InlineEntryInterface
     {
         $previousCode = '';
         if ($this->previousDefinition) {
