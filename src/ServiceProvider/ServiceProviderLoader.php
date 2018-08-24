@@ -44,7 +44,10 @@ class ServiceProviderLoader
     public function loadFromRegistry(Registry $registry)
     {
         foreach ($registry as $key => $serviceProvider) {
-            $this->loadServiceProvider($serviceProvider, $key);
+            $this->loadServiceProviderFactories($serviceProvider, $key);
+        }
+        foreach ($registry as $key => $serviceProvider) {
+            $this->loadServiceProviderExtensions($serviceProvider, $key);
         }
     }
 
@@ -52,14 +55,21 @@ class ServiceProviderLoader
      * @param ServiceProviderInterface $serviceProvider
      * @param int             $serviceProviderKey
      */
-    private function loadServiceProvider(ServiceProviderInterface $serviceProvider, $serviceProviderKey)
+    private function loadServiceProviderFactories(ServiceProviderInterface $serviceProvider, int $serviceProviderKey)
     {
         $serviceFactories = $serviceProvider->getFactories();
 
         foreach ($serviceFactories as $serviceName => $callable) {
             $this->registerService($serviceName, $serviceProviderKey, $callable);
         }
+    }
 
+    /**
+     * @param ServiceProviderInterface $serviceProvider
+     * @param int             $serviceProviderKey
+     */
+    private function loadServiceProviderExtensions(ServiceProviderInterface $serviceProvider, int $serviceProviderKey)
+    {
         $serviceExtensions = $serviceProvider->getExtensions();
 
         foreach ($serviceExtensions as $serviceName => $callable) {
