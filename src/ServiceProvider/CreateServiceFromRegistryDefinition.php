@@ -69,4 +69,9 @@ class CreateServiceFromRegistryDefinition implements DumpableInterface
 
         return new InlineEntry($code, null, $usedVariables);
     }
+
+    public function cloneWithoutIdentifier(): self
+    {
+        return new self(null, $this->serviceName, $this->serviceProviderKey);
+    }
 }

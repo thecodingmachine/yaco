@@ -126,9 +126,11 @@ class ServiceProviderLoader
 
         // TODO: it would be way easier if we could simply rename a definition!!!
         if ($previousDefinition instanceof FactoryCallDefinition) {
-            $innerDefinition = new FactoryCallDefinition(null /*$innerName*/, $previousDefinition->getFactory(), $previousDefinition->getMethodName(), $previousDefinition->getMethodArguments());
-        } elseif ($previousDefinition instanceof CreateServiceFromRegistryDefinition || $previousDefinition instanceof ExtendServiceFromRegistryDefinition) {
-            $innerDefinition = $previousDefinition;
+            $innerDefinition = $previousDefinition->cloneWithoutIdentifier();
+        } elseif ($previousDefinition instanceof CreateServiceFromRegistryDefinition) {
+            $innerDefinition = $previousDefinition->cloneWithoutIdentifier();
+        } elseif ($previousDefinition instanceof ExtendServiceFromRegistryDefinition) {
+            $innerDefinition = $previousDefinition->cloneWithoutIdentifier();
         } else {
             // @codeCoverageIgnoreStart
             throw new CompilerException('Unable to rename definition from class '.get_class($previousDefinition));
@@ -153,8 +155,6 @@ class ServiceProviderLoader
      */
     private function getCreateServiceDefinitionFromCallable($decoratedServiceName, $serviceName, $serviceProviderKey, callable $callable, ContainerDefinition $containerDefinition): DumpableInterface
     {
-        // FIXME: we must split this method in 2. One for the factories and one for the extensions!
-
         if ($callable instanceof DefinitionInterface) {
             return $this->converter->convert($decoratedServiceName, $callable);
         }
@@ -183,8 +183,6 @@ class ServiceProviderLoader
      */
     private function getExtendServiceDefinitionFromCallable($decoratedServiceName, $serviceName, $serviceProviderKey, callable $callable, ContainerDefinition $containerDefinition, DumpableInterface $previousDefinition = null): DumpableInterface
     {
-        // FIXME: we must split this method in 2. One for the factories and one for the extensions!
-
         if ($callable instanceof DefinitionInterface) {
             return $this->converter->convert($decoratedServiceName, $callable);
         }
