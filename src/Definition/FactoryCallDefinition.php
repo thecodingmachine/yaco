@@ -123,4 +123,9 @@ class FactoryCallDefinition implements DumpableInterface
 
         return new InlineEntry($code, $prependedCode, $usedVariables);
     }
+
+    public function cloneWithoutIdentifier(): self
+    {
+        return new self(null, $this->factory, $this->methodName, $this->methodArguments);
+    }
 }
